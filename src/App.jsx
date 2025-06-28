@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logo from "./assets/IMG_0682.JPEG";
 import "./App.css";
 import { Menu } from "lucide-react";
@@ -8,79 +8,86 @@ function App() {
   const [count, setCount] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const handleToggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
   };
 
-  const closeDropdown = () => {
+  const handleMenuClick = (sectionId) => {
+    // Close dropdown first
     setIsDropdownOpen(false);
+
+    // Scroll to section
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 100);
   };
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-    closeDropdown();
-  };
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isDropdownOpen && !event.target.closest(".dropdown-container")) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [isDropdownOpen]);
 
   return (
     <>
       {/* Sticky menu bar */}
       <div className="fixed top-0 left-0 right-0 z-50 w-full flex justify-center bg-primary py-2">
-        <div
-          className={`dropdown dropdown-center ${
-            isDropdownOpen ? "dropdown-open" : ""
-          }`}
-        >
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn m-1 justify-self-center bg-primary"
-            onClick={toggleDropdown}
+        <div className="relative dropdown-container">
+          <button
+            className="btn m-1 justify-self-center bg-primary cursor-pointer"
+            onClick={handleToggleDropdown}
           >
             <Menu color="#DFFE59" />
-          </div>
-          <ul
-            tabIndex={0}
-            className="dropdown-content border-accent border-2 flex flex-col text-secondary text-lg text-center menu max-w-xl bg-primary rounded-box z-[60] w-52 p-2"
-          >
-            <li>
-              <a
-                className="text-secondary self-center text-center w-full justify-center cursor-pointer"
-                onClick={() => scrollToSection("events")}
-              >
-                events
-              </a>
-            </li>
-            <li>
-              <a
-                className="text-secondary self-center text-center w-full justify-center cursor-pointer"
-                onClick={() => scrollToSection("private-events")}
-              >
-                request a private event
-              </a>
-            </li>
-            <li>
-              <a
-                className="text-secondary self-center text-center w-full justify-center cursor-pointer"
-                onClick={() => scrollToSection("about")}
-              >
-                about us
-              </a>
-            </li>
-            <li>
-              <a
-                className="text-secondary self-center text-center w-full justify-center cursor-pointer"
-                onClick={() => scrollToSection("faqs")}
-              >
-                FAQs
-              </a>
-            </li>
-          </ul>
+          </button>
+
+          {isDropdownOpen && (
+            <ul className="absolute top-full left-1/2 transform -translate-x-1/2 border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1">
+              <li>
+                <button
+                  className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                  onClick={() => handleMenuClick("events")}
+                >
+                  events
+                </button>
+              </li>
+              <li>
+                <button
+                  className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                  onClick={() => handleMenuClick("private-events")}
+                >
+                  request a private event
+                </button>
+              </li>
+              <li>
+                <button
+                  className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                  onClick={() => handleMenuClick("about")}
+                >
+                  about us
+                </button>
+              </li>
+              <li>
+                <button
+                  className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                  onClick={() => handleMenuClick("faqs")}
+                >
+                  FAQs
+                </button>
+              </li>
+            </ul>
+          )}
         </div>
       </div>
 
