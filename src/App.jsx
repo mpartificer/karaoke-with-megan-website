@@ -162,12 +162,13 @@ function App() {
         <section id="about" className="w-full max-w-4xl mx-auto px-6 py-16">
           <div className="text-center">
             <h2 className="text-4xl font-bold text-secondary mb-8">about us</h2>
-            <div className="max-w-3xl mx-auto">
-              <p className="text-lg text-gray-700 mb-6">
-                Welcome to Karaoke with Megan! We're passionate about bringing
-                people together through the joy of music and performance.
-                Whether you're a seasoned performer or just looking to have fun
-                with friends, our welcoming environment is perfect for everyone.
+            <div className="max-w-3xl mx-auto bg-secondary rounded-lg p-6">
+              <p className="text-lg text-gray-700 font-semibold mb-6">
+                Hi, I'm Megan! You can often find me in the host's chair at
+                Erin's Pub on Thursdays. My goal has been and will always be to
+                create a safe, fun, and inclusive event in the downtown space.
+                Everyone should get to feel like a star, and no one should have
+                to feel alone on stage.
               </p>
               <div className="grid md:grid-cols-3 gap-8 mt-12">
                 <div className="text-center">
@@ -178,7 +179,8 @@ function App() {
                     Professional Equipment
                   </h3>
                   <p className="text-gray-600">
-                    State-of-the-art sound systems and microphones
+                    4 screens, 2 microphones, and a sound system that can handle
+                    a crowd!
                   </p>
                 </div>
                 <div className="text-center">
@@ -189,7 +191,8 @@ function App() {
                     Huge Song Library
                   </h3>
                   <p className="text-gray-600">
-                    Over 10,000 songs from all eras and genres
+                    We get our tracks from Youtube, so the songs you practice on
+                    are exactly what you will sing with!
                   </p>
                 </div>
                 <div className="text-center">
@@ -200,7 +203,7 @@ function App() {
                     Fun Atmosphere
                   </h3>
                   <p className="text-gray-600">
-                    Supportive environment for performers of all levels
+                    Inclusive environment for performers of all levels!
                   </p>
                 </div>
               </div>
@@ -219,10 +222,15 @@ function App() {
               <div className="space-y-6">
                 <div className="bg-white rounded-lg shadow-lg p-6">
                   <h3 className="text-xl font-semibold text-primary mb-3">
-                    Do I need to make a reservation?
+                    How long will my song take?
                   </h3>
                   <p className="text-gray-700">
-                    No way! First come first serve!
+                    That really depends on how many people are there and how
+                    many songs you want to sing! I try to make sure everyone
+                    gets a turn per round, and often I will do a host tax (aka,
+                    sing a song!) as a marker that we're at the top of the
+                    round. I have found this is the fairest way to ensure that
+                    everyone gets a chance to perform
                   </p>
                 </div>
                 <div className="bg-white rounded-lg shadow-lg p-6">
@@ -240,9 +248,9 @@ function App() {
                     Can I request songs not in your library?
                   </h3>
                   <p className="text-gray-700">
-                    We're always updating our song library! Let us know what
-                    you'd like to see added, and we'll do our best to include it
-                    for future events.
+                    You certainly can! If there's no karaoke version of the song
+                    you want on Youtube, feel free to sing along to the regular
+                    track if you're comfortable
                   </p>
                 </div>
                 <div className="bg-white rounded-lg shadow-lg p-6">
@@ -250,9 +258,7 @@ function App() {
                     What are your age restrictions?
                   </h3>
                   <p className="text-gray-700">
-                    Our regular events are all-ages until 9 PM, then 21+ only.
-                    Private events can be customized based on your group's needs
-                    and preferences.
+                    19+, but this is flexible for private events.
                   </p>
                 </div>
               </div>
