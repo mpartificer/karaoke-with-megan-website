@@ -222,9 +222,7 @@ function App() {
                     Do I need to make a reservation?
                   </h3>
                   <p className="text-gray-700">
-                    Reservations are recommended for Friday and Saturday nights,
-                    but walk-ins are welcome when space is available. Private
-                    events require advance booking.
+                    No way! First come first serve!
                   </p>
                 </div>
                 <div className="bg-white rounded-lg shadow-lg p-6">
