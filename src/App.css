@@ -5,10 +5,6 @@
   text-align: center;
 }
 
-body {
-  /* background-color: #000070; - removed to allow DaisyUI theme to work */
-}
-
 .logo {
   height: 6em;
   padding: 1.5em;
