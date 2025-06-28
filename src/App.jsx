@@ -2,6 +2,7 @@ import { useState } from "react";
 import logo from "./assets/IMG_0682.JPEG";
 import "./App.css";
 import { Menu } from "lucide-react";
+import BookingForm from "./components/BookingForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -140,10 +141,10 @@ function App() {
         {/* Private Events Section */}
         <section
           id="private-events"
-          className="w-full max-w-4xl mx-auto px-6 py-16 bg-gray-50"
+          className="w-full max-w-4xl mx-auto px-6 py-16 bg-secondary rounded-lg"
         >
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-secondary mb-8">
+            <h2 className="text-4xl font-bold text-primary mb-8">
               request a private event
             </h2>
             <div className="max-w-2xl mx-auto">
@@ -152,48 +153,7 @@ function App() {
                 events for birthdays, corporate parties, and other special
                 occasions.
               </p>
-              <div className="bg-white rounded-lg shadow-lg p-8">
-                <h3 className="text-2xl font-semibold text-primary mb-6">
-                  What We Offer
-                </h3>
-                <div className="grid md:grid-cols-2 gap-6 text-left">
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-2">
-                      Party Packages
-                    </h4>
-                    <p className="text-gray-600">
-                      Customized packages for groups of 10-50 people
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-2">
-                      Professional Setup
-                    </h4>
-                    <p className="text-gray-600">
-                      High-quality sound system and lighting
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-2">
-                      Song Library
-                    </h4>
-                    <p className="text-gray-600">
-                      Thousands of songs across all genres
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-2">
-                      Catering Options
-                    </h4>
-                    <p className="text-gray-600">
-                      Food and beverage packages available
-                    </p>
-                  </div>
-                </div>
-                <button className="mt-8 bg-primary text-white px-8 py-3 rounded-lg hover:bg-opacity-90 transition-colors">
-                  Contact Us for Booking
-                </button>
-              </div>
+              <BookingForm />
             </div>
           </div>
         </section>
