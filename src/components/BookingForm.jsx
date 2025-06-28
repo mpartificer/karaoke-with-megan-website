@@ -210,7 +210,7 @@ ${formData.additionalNotes || "No additional notes provided."}
           disabled={isSubmitting}
           className="w-full bg-primary text-white px-8 py-3 rounded-lg hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? "Sending Request..." : "Submit Booking Request"}
+          {isSubmitting ? "sending request..." : "submit booking request"}
         </button>
       </form>
     </div>

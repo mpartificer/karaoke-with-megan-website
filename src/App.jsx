@@ -235,6 +235,16 @@ function App() {
                 </div>
                 <div className="bg-white rounded-lg shadow-lg p-6">
                   <h3 className="text-xl font-semibold text-primary mb-3">
+                    How much to bump my songs up?{" "}
+                  </h3>
+                  <p className="text-gray-700">
+                    Bribes start at $50! Sure, it is a high price to pay, but I
+                    feel like if I'm going to compromise on the system, it has
+                    to be worth my while!
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg shadow-lg p-6">
+                  <h3 className="text-xl font-semibold text-primary mb-3">
                     What if I'm nervous about singing?
                   </h3>
                   <p className="text-gray-700">
