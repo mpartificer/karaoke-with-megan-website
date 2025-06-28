@@ -167,8 +167,8 @@ function App() {
                 Hi, I'm Megan! You can often find me in the host's chair at
                 Erin's Pub on Thursdays. My goal has been and will always be to
                 create a safe, fun, and inclusive event in the downtown space.
-                Everyone should get to feel like a star, and no one should have
-                to feel alone on stage.
+                Everyone should get to feel like a star, and no one feels alone
+                on stage.
               </p>
               <div className="grid md:grid-cols-3 gap-8 mt-12">
                 <div className="text-center">
