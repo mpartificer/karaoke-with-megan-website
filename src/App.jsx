@@ -523,7 +523,7 @@ function App() {
                       <img
                         src={insta}
                         className="w-8 h-8 mt-4 justify-self-center"
-                        alt="follow us on instagram!"
+                        alt="follow us on instagram! made by Freepik from flaticon"
                       />
                     </a>
                     <div className="grid gap-8 mt-12">
