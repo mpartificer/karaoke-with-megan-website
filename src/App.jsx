@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
 import logo from "./assets/IMG_0682.JPEG";
+import insta from "./assets/insta.png";
 import BookingForm from "./components/BookingForm";
 
 function App() {
@@ -217,6 +218,16 @@ function App() {
                   space. Everyone should get to feel like a star, and no one
                   feels alone on stage.
                 </p>
+                <a
+                  href="https://www.instagram.com/karaokewithmegan?igsh=MTB1d3c0bjg1OHhxeg%3D%3D&utm_source=qr"
+                  target="_blank"
+                >
+                  <img
+                    src={insta}
+                    className="w-8 h-8 mt-4 justify-self-center"
+                    alt="follow us on instagram!"
+                  />
+                </a>
                 <div className="grid md:grid-cols-3 gap-8 mt-12">
                   <div className="text-center">
                     <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
@@ -505,6 +516,16 @@ function App() {
                       the downtown space. Everyone should get to feel like a
                       star, and no one feels alone on stage.
                     </p>
+                    <a
+                      href="https://www.instagram.com/karaokewithmegan?igsh=MTB1d3c0bjg1OHhxeg%3D%3D&utm_source=qr"
+                      target="_blank"
+                    >
+                      <img
+                        src={insta}
+                        className="w-8 h-8 mt-4 justify-self-center"
+                        alt="follow us on instagram!"
+                      />
+                    </a>
                     <div className="grid gap-8 mt-12">
                       <div className="text-center">
                         <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
