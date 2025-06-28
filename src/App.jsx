@@ -16,13 +16,18 @@ function App() {
     // Close dropdown first
     setIsDropdownOpen(false);
 
-    // Scroll to section
+    // Scroll to section with offset for fixed header
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({
+        const headerHeight = 80; // Adjust this value based on your header height
+        const elementPosition =
+          element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
           behavior: "smooth",
-          block: "start",
         });
       }
     }, 100);
@@ -148,7 +153,7 @@ function App() {
         {/* Private Events Section */}
         <section
           id="private-events"
-          className="w-full max-w-4xl mx-auto px-6 py-16 bg-secondary rounded-lg"
+          className="w-full max-w-4xl mx-auto px-6 mb-8 py-16 bg-secondary rounded-lg"
         >
           <div className="text-center">
             <h2 className="text-4xl font-bold text-primary mb-8">
@@ -166,7 +171,10 @@ function App() {
         </section>
 
         {/* About Us Section */}
-        <section id="about" className="w-full max-w-4xl mx-auto px-6 py-16">
+        <section
+          id="about"
+          className="w-full max-w-4xl mx-auto mt-8 px-6 py-16"
+        >
           <div className="text-center">
             <h2 className="text-4xl font-bold text-secondary mb-8">about us</h2>
             <div className="max-w-3xl mx-auto bg-secondary rounded-lg p-6">
