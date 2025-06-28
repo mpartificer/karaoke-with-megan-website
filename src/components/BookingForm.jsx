@@ -82,7 +82,7 @@ ${formData.additionalNotes || "No additional notes provided."}
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-6">
           <div>
             <label
               htmlFor="fullName"

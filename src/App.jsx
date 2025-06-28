@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
 import logo from "./assets/IMG_0682.JPEG";
 import BookingForm from "./components/BookingForm";
@@ -6,6 +6,7 @@ import BookingForm from "./components/BookingForm";
 function App() {
   const [count, setCount] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const scrollContainerRef = useRef(null);
 
   const handleToggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -20,14 +21,35 @@ function App() {
       const element = document.getElementById(sectionId);
       if (element) {
         const headerHeight = 80; // Adjust this value based on your header height
-        const elementPosition =
-          element.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - headerHeight;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth",
-        });
+        // Check if we're on desktop (large screen)
+        const isDesktop = window.innerWidth >= 1024;
+
+        if (isDesktop && scrollContainerRef.current) {
+          // For desktop: scroll within the container
+          const containerRect =
+            scrollContainerRef.current.getBoundingClientRect();
+          const elementRect = element.getBoundingClientRect();
+          const scrollTop = scrollContainerRef.current.scrollTop;
+
+          const offsetPosition =
+            scrollTop + (elementRect.top - containerRect.top) - headerHeight;
+
+          scrollContainerRef.current.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        } else {
+          // For mobile: scroll the window
+          const elementPosition =
+            element.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - headerHeight;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }
       }
     }, 100);
   };
@@ -181,7 +203,7 @@ function App() {
           {/* About Us Section */}
           <section
             id="about"
-            className="w-full max-w-4xl mx-auto mt-8 px-6 py-16"
+            className="w-full max-w-4xl mx-auto mt-8 px-6 pb-16"
           >
             <div className="text-center">
               <h2 className="text-4xl font-bold text-secondary mb-8">
@@ -239,7 +261,7 @@ function App() {
           {/* FAQs Section */}
           <section
             id="faqs"
-            className="w-full max-w-4xl mx-auto px-6 py-16 bg-gray-50"
+            className="max-w-4xl mr-4 ml-4 rounded-lg px-6 py-16 bg-gray-50"
           >
             <div className="text-center">
               <h2 className="text-4xl font-bold text-secondary mb-8">faqs</h2>
@@ -303,24 +325,27 @@ function App() {
         </div>
       </div>
 
-      {/* Desktop Layout - new */}
+      {/* Desktop Layout - fixed */}
       <div className="flex w-screen h-screen overflow-hidden pt-12 justify-center items-center">
         <div className="hidden lg:flex h-screen w-3/4">
           {/* Left side - Image */}
           <div className="w-1/2 h-3/4">
-            <a target="_blank">
+            <a
+              target="_blank"
+              href="https://www.instagram.com/betterpleasure?igsh=MTB6dGFtMHJxbncyMw=="
+            >
               <img
                 src={logo}
                 className="w-full"
-                alt="Karaoke with Megan logo"
+                alt="Karaoke with Megan logo, made by the bestie @betterpleasure"
               />
             </a>
           </div>
 
           {/* Right side - Content */}
-          <div className="w-1/2 h-3/4 flex justify-center items-center flex-col">
+          <div className="w-1/2 h-3/4 flex flex-col">
             {/* Sticky menu bar */}
-            <div className="sticky top-0 z-50 w-full flex justify-center bg-primary py-2">
+            <div className="sticky top-0 z-50 w-full flex justify-center bg-primary py-2 flex-shrink-0">
               <div className="relative dropdown-container">
                 <button
                   className="btn m-1 justify-self-center bg-primary cursor-pointer"
@@ -334,7 +359,7 @@ function App() {
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("events")}
+                        onClick={() => handleMenuClick("desktop-events")}
                       >
                         events
                       </button>
@@ -342,7 +367,9 @@ function App() {
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("private-events")}
+                        onClick={() =>
+                          handleMenuClick("desktop-private-events")
+                        }
                       >
                         request a private event
                       </button>
@@ -350,7 +377,7 @@ function App() {
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("about")}
+                        onClick={() => handleMenuClick("desktop-about")}
                       >
                         about us
                       </button>
@@ -358,7 +385,7 @@ function App() {
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("faqs")}
+                        onClick={() => handleMenuClick("desktop-faqs")}
                       >
                         FAQs
                       </button>
@@ -369,9 +396,15 @@ function App() {
             </div>
 
             {/* Scrollable content */}
-            <div className="flex-1 h-fit content-stretch overflow-scroll">
+            <div
+              ref={scrollContainerRef}
+              className="flex-1 overflow-y-auto overflow-x-hidden"
+            >
               {/* Events Section */}
-              <section id="events" className="w-full px-6 py-8">
+              <section
+                id="desktop-events"
+                className="w-full px-6 py-16 min-h-screen"
+              >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-secondary mb-8">
                     events
@@ -437,8 +470,8 @@ function App() {
 
               {/* Private Events Section */}
               <section
-                id="private-events"
-                className="w-full px-6 mb-8 py-16 bg-secondary rounded-lg mx-6"
+                id="desktop-private-events"
+                className="px-6 mb-8 py-16 bg-secondary rounded-lg mx-6 min-h-screen"
               >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-primary mb-8">
@@ -456,7 +489,10 @@ function App() {
               </section>
 
               {/* About Us Section */}
-              <section id="about" className="w-full px-6 py-16">
+              <section
+                id="desktop-about"
+                className="w-full px-6 mt-20 pb-16 min-h-screen"
+              >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-secondary mb-8">
                     about us
@@ -512,8 +548,8 @@ function App() {
 
               {/* FAQs Section */}
               <section
-                id="faqs"
-                className="w-full px-6 py-16 bg-gray-50 mx-6 rounded-lg mb-8"
+                id="desktop-faqs"
+                className="px-6 py-16 bg-gray-50 mx-6 rounded-lg mb-8 min-h-screen"
               >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-secondary mb-8">
