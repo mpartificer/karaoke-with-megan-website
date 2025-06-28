@@ -511,10 +511,10 @@ function App() {
                   <div className="mx-auto bg-secondary rounded-lg p-6">
                     <p className="text-lg text-gray-700 font-semibold mb-6">
                       Hi, I'm Megan! You can often find me in the host's chair
-                      at Erin's Pub on Thursdays. My goal has been and will
-                      always be to create a safe, fun, and inclusive event in
-                      the downtown space. Everyone should get to feel like a
-                      star, and no one feels alone on stage.
+                      at Erin's Pub in St. John's, NL on Thursdays. My goal has
+                      been and will always be to create a safe, fun, and
+                      inclusive event in the downtown space. Everyone should get
+                      to feel like a star, and no one feels alone on stage.
                     </p>
                     <a
                       href="https://www.instagram.com/karaokewithmegan?igsh=MTB1d3c0bjg1OHhxeg%3D%3D&utm_source=qr"
