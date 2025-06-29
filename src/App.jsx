@@ -337,7 +337,7 @@ function App() {
       </div>
 
       {/* Desktop Layout - fixed */}
-      <div className="flex w-screen h-screen overflow-hidden pt-12 justify-center items-center">
+      <div className="flex w-screen h-screen overflow-hidden pt-12 justify-center align-center">
         <div className="hidden lg:flex h-screen w-3/4">
           {/* Left side - Image */}
           <div className="w-1/2 h-3/4">
@@ -414,7 +414,7 @@ function App() {
               {/* Events Section */}
               <section
                 id="desktop-events"
-                className="w-full px-6 py-16 min-h-screen"
+                className="w-full px-6 pb-16 pt-8 min-h-screen"
               >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-secondary mb-8">
@@ -482,7 +482,7 @@ function App() {
               {/* Private Events Section */}
               <section
                 id="desktop-private-events"
-                className="px-6 mb-8 py-16 bg-secondary rounded-lg mx-6 min-h-screen"
+                className="px-6 mb-8 pb-16 pt-8 bg-secondary rounded-lg mx-6 min-h-screen"
               >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-primary mb-8">
@@ -502,14 +502,14 @@ function App() {
               {/* About Us Section */}
               <section
                 id="desktop-about"
-                className="w-full px-6 mt-20 pb-16 min-h-screen"
+                className="w-full px-6 mt-16 pb-16 min-h-screen"
               >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-secondary mb-8">
                     about us
                   </h2>
                   <div className="mx-auto bg-secondary rounded-lg p-6">
-                    <p className="text-lg text-gray-700 font-semibold mb-6">
+                    <p className="text-lg text-primary font-semibold mb-6">
                       Hi, I'm Megan! You can often find me in the host's chair
                       at Erin's Pub in St. John's, NL on Thursdays. My goal has
                       been and will always be to create a safe, fun, and
@@ -534,7 +534,7 @@ function App() {
                         <h3 className="text-xl font-semibold text-primary mb-2">
                           Professional Equipment
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-primary">
                           4 screens, 2 microphones, and a sound system that can
                           handle a crowd!
                         </p>
@@ -546,7 +546,7 @@ function App() {
                         <h3 className="text-xl font-semibold text-primary mb-2">
                           Huge Song Library
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-primary">
                           We get our tracks from Youtube, so the songs you
                           practice on are exactly what you will sing with!
                         </p>
@@ -558,7 +558,7 @@ function App() {
                         <h3 className="text-xl font-semibold text-primary mb-2">
                           Fun Atmosphere
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-primary">
                           Inclusive environment for performers of all levels!
                         </p>
                       </div>
@@ -570,7 +570,7 @@ function App() {
               {/* FAQs Section */}
               <section
                 id="desktop-faqs"
-                className="px-6 py-16 bg-gray-50 mx-6 rounded-lg mb-8 min-h-screen"
+                className="px-6 pb-16 pt-8 bg-gray-50 mx-6 rounded-lg mb-8 min-h-screen"
               >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-secondary mb-8">
@@ -582,7 +582,7 @@ function App() {
                         <h3 className="text-xl font-semibold text-primary mb-3">
                           How long will my song take?
                         </h3>
-                        <p className="text-gray-700">
+                        <p className="text-primary">
                           That really depends on how many people are there and
                           how many songs you want to sing! I try to make sure
                           everyone gets a turn per round, and often I will do a
@@ -595,7 +595,7 @@ function App() {
                         <h3 className="text-xl font-semibold text-primary mb-3">
                           How much to bump my songs up?{" "}
                         </h3>
-                        <p className="text-gray-700">
+                        <p className="text-primary">
                           Bribes start at $50! Sure, it is a high price to pay,
                           but I feel like if I'm going to compromise on the
                           system, it has to be worth my while!
@@ -605,7 +605,7 @@ function App() {
                         <h3 className="text-xl font-semibold text-primary mb-3">
                           What if I'm nervous about singing?
                         </h3>
-                        <p className="text-gray-700">
+                        <p className="text-primary">
                           Don't worry! We have a very supportive crowd and
                           encourage singers of all levels. You can also start
                           with group songs or duets if that makes you more
@@ -616,7 +616,7 @@ function App() {
                         <h3 className="text-xl font-semibold text-primary mb-3">
                           Can I request songs not in your library?
                         </h3>
-                        <p className="text-gray-700">
+                        <p className="text-primary">
                           You certainly can! If there's no karaoke version of
                           the song you want on Youtube, feel free to sing along
                           to the regular track if you're comfortable
@@ -626,7 +626,7 @@ function App() {
                         <h3 className="text-xl font-semibold text-primary mb-3">
                           What are your age restrictions?
                         </h3>
-                        <p className="text-gray-700">
+                        <p className="text-primary">
                           19+, but this is flexible for private events.
                         </p>
                       </div>
