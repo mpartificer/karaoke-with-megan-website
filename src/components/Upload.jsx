@@ -80,17 +80,11 @@ function Upload({ user }) {
     const formData = new FormData();
     const isVideo = file.type.startsWith("video/");
 
-    // Add transformations for resizing
-    const transformation = isVideo
-      ? "c_limit,w_1280,h_720,q_auto,f_auto"
-      : "c_limit,w_1920,h_1080,q_auto,f_auto";
-
     formData.append("file", file);
     formData.append(
       "upload_preset",
       import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
     );
-    formData.append("transformation", transformation);
 
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${
@@ -183,6 +177,11 @@ function Upload({ user }) {
           <p className="text-lg text-accent">
             share the mems! gimme ur content!
           </p>
+          {user && (
+            <p className="text-sm text-accent mt-2">
+              Uploading as: {user.name} ({user.email})
+            </p>
+          )}
         </div>
 
         <div className="bg-accent rounded-lg shadow-lg p-8">
