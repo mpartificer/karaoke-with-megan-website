@@ -1,13 +1,40 @@
 import { useState, useEffect, useRef } from "react";
-import { Menu } from "lucide-react";
+import { Menu, House } from "lucide-react";
 import logo from "./assets/IMG_0682.JPEG";
 import insta from "./assets/insta.png";
 import BookingForm from "./components/BookingForm";
+import Upload from "./components/Upload";
 
+// Main App Component with Hash Router
 function App() {
   const [count, setCount] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState("home");
   const scrollContainerRef = useRef(null);
+
+  // Hash router effect
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1); // Remove the #
+      setCurrentPage(hash || "home");
+    };
+
+    // Set initial page based on hash
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
+
+  const navigateTo = (page) => {
+    window.location.hash = page;
+    setCurrentPage(page);
+    setIsDropdownOpen(false);
+  };
 
   const handleToggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -17,7 +44,17 @@ function App() {
     // Close dropdown first
     setIsDropdownOpen(false);
 
-    // Scroll to section with offset for fixed header
+    // If we're not on home page, navigate to home first
+    if (currentPage !== "home") {
+      navigateTo("home");
+      // Wait for page to load then scroll
+      setTimeout(() => scrollToSection(sectionId), 100);
+    } else {
+      scrollToSection(sectionId);
+    }
+  };
+
+  const scrollToSection = (sectionId) => {
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
@@ -67,9 +104,85 @@ function App() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isDropdownOpen]);
 
+  // Render Upload page
+  if (currentPage === "upload") {
+    return (
+      <div>
+        {/* Navigation for upload page */}
+        <div className="fixed top-0 left-0 right-0 z-50 w-full flex justify-center bg-primary py-2">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => navigateTo("home")}
+              className="text-secondary hover:text-accent font-semibold"
+            >
+              <House />
+            </button>
+            <div className="relative dropdown-container">
+              <button
+                className="btn m-1 justify-self-center bg-primary cursor-pointer"
+                onClick={handleToggleDropdown}
+              >
+                <Menu color="#DFFE59" />
+              </button>
+
+              {isDropdownOpen && (
+                <ul className="absolute top-full left-1/2 transform -translate-x-1/2 border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1">
+                  <li>
+                    <button
+                      className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                      onClick={() => handleMenuClick("events")}
+                    >
+                      events
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                      onClick={() => handleMenuClick("private-events")}
+                    >
+                      request a private event
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                      onClick={() => handleMenuClick("about")}
+                    >
+                      about us
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                      onClick={() => handleMenuClick("faqs")}
+                    >
+                      FAQs
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                      onClick={() => navigateTo("upload")}
+                    >
+                      upload your photos & videos
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="pt-16">
+          <Upload />
+        </div>
+      </div>
+    );
+  }
+
+  // Render main home page
   return (
     <>
-      {/* Mobile Layout - unchanged */}
+      {/* Mobile Layout */}
       <div className="lg:hidden">
         {/* Sticky menu bar */}
         <div className="fixed top-0 left-0 right-0 z-50 w-full flex justify-center bg-primary py-2">
@@ -113,6 +226,14 @@ function App() {
                     onClick={() => handleMenuClick("faqs")}
                   >
                     FAQs
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                    onClick={() => navigateTo("upload")}
+                  >
+                    upload your photos & videos
                   </button>
                 </li>
               </ul>
@@ -336,7 +457,7 @@ function App() {
         </div>
       </div>
 
-      {/* Desktop Layout - fixed */}
+      {/* Desktop Layout */}
       <div className="flex w-screen h-screen overflow-hidden pt-12 justify-center align-center">
         <div className="hidden lg:flex h-screen w-3/4">
           {/* Left side - Image */}
@@ -399,6 +520,14 @@ function App() {
                         onClick={() => handleMenuClick("desktop-faqs")}
                       >
                         FAQs
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
+                        onClick={() => navigateTo("upload")}
+                      >
+                        upload your photos & videos
                       </button>
                     </li>
                   </ul>
