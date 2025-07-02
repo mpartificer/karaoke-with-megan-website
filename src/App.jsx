@@ -7,7 +7,6 @@ import Upload from "./components/Upload";
 import Login from "./components/Login";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
-// Protected Route Component
 function ProtectedRoute({ children }) {
   const { user, isLoading } = useAuth();
 
