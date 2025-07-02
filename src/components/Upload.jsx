@@ -63,7 +63,7 @@ function Upload() {
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="bg-accent rounded-lg shadow-lg p-8">
           <div
             className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               dragActive
@@ -86,10 +86,10 @@ function Upload() {
 
             <div className="space-y-4">
               <div className="flex justify-center space-x-4">
-                <div className="bg-accent rounded-full p-3">
+                <div className="bg-neutral rounded-full p-3">
                   <Camera className="h-8 w-8 text-primary" />
                 </div>
-                <div className="bg-accent rounded-full p-3">
+                <div className="bg-neutral rounded-full p-3">
                   <Video className="h-8 w-8 text-primary" />
                 </div>
               </div>
@@ -101,7 +101,7 @@ function Upload() {
                 <p className="text-gray-500 mb-4">or</p>
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="bg-accent text-primary px-6 py-3 rounded-lg font-semibold hover:bg-accent/80 transition-colors"
+                  className="bg-neutral text-primary px-6 py-3 rounded-lg font-semibold hover:bg-accent/80 transition-colors"
                 >
                   Browse Files
                 </button>
@@ -158,23 +158,28 @@ function Upload() {
           )}
         </div>
 
-        <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+        <div className="mt-8 bg-accent rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-semibold text-primary mb-4">
-            Submission Guidelines
+            submission guidelines
           </h3>
-          <ul className="space-y-2 text-gray-700">
-            <li>• Please only upload content from our karaoke events</li>
+          <ul className="space-y-2 text-primary">
             <li>
-              • Make sure you have permission from everyone visible in
-              photos/videos
-            </li>
-            <li>• Keep content appropriate and family-friendly</li>
-            <li>
-              • By uploading, you give us permission to share on our social
-              media
+              • please only upload content from our karaoke event! i'm operating
+              on the free database tier over here, okay?
             </li>
             <li>
-              • We may feature your content on our Instagram @karaokewithmegan
+              • consent is gorgeous in all things! make sure you have permission
+              from everyone visible in your uploads!
+            </li>
+            <li>
+              • don't be gross - you're literally talking to megan right now, i
+              built this thing, and if you send me dick pics so help me god i
+              will find you and press charges 😙
+            </li>
+            <li>
+              • by uploading, you give us permission to share on our social
+              media @karaokewithmegan and if you don't follow us then you should
+              go do it now!
             </li>
           </ul>
         </div>
