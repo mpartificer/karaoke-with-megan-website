@@ -11,15 +11,18 @@ export function AuthProvider({ children }) {
   // Check for existing authentication on app load
   useEffect(() => {
     const checkAuth = () => {
-      // Check localStorage for user session
-      const savedUser = localStorage.getItem("karaoke_user");
-      if (savedUser) {
-        try {
+      // In Claude artifacts, we can't use localStorage, so we'll just set loading to false
+      // In a real deployment, you would check localStorage here
+      try {
+        // This would be: const savedUser = localStorage.getItem("karaoke_user");
+        // For now, we'll just simulate no saved user
+        const savedUser = null;
+
+        if (savedUser) {
           setUser(JSON.parse(savedUser));
-        } catch (error) {
-          console.error("Error parsing saved user:", error);
-          localStorage.removeItem("karaoke_user");
         }
+      } catch (error) {
+        console.error("Error checking auth:", error);
       }
       setIsLoading(false);
     };
@@ -29,12 +32,16 @@ export function AuthProvider({ children }) {
 
   const login = (userData) => {
     setUser(userData);
-    localStorage.setItem("karaoke_user", JSON.stringify(userData));
+    // In a real deployment, you would also do:
+    // localStorage.setItem("karaoke_user", JSON.stringify(userData));
+    console.log("User logged in:", userData);
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("karaoke_user");
+    // In a real deployment, you would also do:
+    // localStorage.removeItem("karaoke_user");
+    console.log("User logged out");
   };
 
   return (
