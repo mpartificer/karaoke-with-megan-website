@@ -6,8 +6,11 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useState, useRef } from "react";
+import { useAuth } from "../contexts/AuthContext"; // Add this import
 
-function Upload({ user }) {
+function Upload() {
+  // Remove the user prop since we'll get it from useAuth
+  const { user } = useAuth(); // Add this line to get user from context
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -104,6 +107,9 @@ function Upload({ user }) {
   };
 
   const logToDatabase = async (uploadData, file) => {
+    // Add some debugging to see what user data we have
+    console.log("User data for database logging:", user);
+
     const response = await fetch("/api/log-upload", {
       method: "POST",
       headers: {
