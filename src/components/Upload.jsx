@@ -17,9 +17,9 @@ function Upload() {
   const [uploadResults, setUploadResults] = useState([]);
   const fileInputRef = useRef(null);
 
-  // File size limits (10MB for images, 50MB for videos)
-  const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
-  const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
+  // File size limits (25MB for images, 200MB for videos)
+  const MAX_IMAGE_SIZE = 25 * 1024 * 1024; // 25MB
+  const MAX_VIDEO_SIZE = 200 * 1024 * 1024; // 200MB
 
   const handleFiles = (files) => {
     const fileArray = Array.from(files).filter((file) => {
@@ -31,7 +31,7 @@ function Upload() {
       if (file.size > sizeLimit) {
         alert(
           `File ${file.name} is too large. Max size: ${
-            isImage ? "10MB" : "50MB"
+            isImage ? "25MB" : "200MB"
           }`
         );
         return false;
@@ -237,7 +237,7 @@ function Upload() {
               </div>
 
               <p className="text-sm text-gray-500">
-                Supported: JPG, PNG, GIF, MP4, MOV, AVI (Max 10MB images, 50MB
+                Supported: JPG, PNG, GIF, MP4, MOV, AVI (Max 25MB images, 200MB
                 videos)
               </p>
             </div>
