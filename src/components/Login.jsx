@@ -118,19 +118,25 @@ const Login = () => {
     if (window.FB) {
       window.FB.login(
         (response) => {
+          console.log("Facebook login response:", response); // Debug log
+
           if (response.authResponse) {
             // Get user info
             window.FB.api(
               "/me",
               { fields: "name,email,picture" },
               (userInfo) => {
+                console.log("Facebook user info:", userInfo); // Debug log
+
                 const userData = {
                   id: userInfo.id,
                   name: userInfo.name,
-                  email: userInfo.email,
+                  email: userInfo.email || null, // Handle case where email might be undefined
                   picture: userInfo.picture?.data?.url,
                   provider: "facebook",
                 };
+
+                console.log("Final user data being saved:", userData); // Debug log
 
                 // Use the login function from auth context
                 login(userData);
@@ -145,7 +151,7 @@ const Login = () => {
           }
           setIsLoading((prev) => ({ ...prev, facebook: false }));
         },
-        { scope: "public_profile" }
+        { scope: "public_profile,email" } // CHANGED: Added email to the scope
       );
     } else {
       console.error("Facebook SDK not loaded");
