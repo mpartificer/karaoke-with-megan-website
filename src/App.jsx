@@ -493,7 +493,7 @@ function App() {
               {/* Desktop Private Events Section */}
               <section
                 id="desktop-private-events"
-                className="px-6 mb-8 pb-16 pt-8 bg-secondary rounded-lg mx-6 min-h-screen"
+                className="px-6 mb-8 pb-8 pt-4 mt-4 bg-secondary rounded-lg mx-6 min-h-screen"
               >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-primary mb-8">
@@ -513,7 +513,7 @@ function App() {
               {/* Desktop About Us Section */}
               <section
                 id="desktop-about"
-                className="w-full px-6 mt-16 pb-16 min-h-screen"
+                className="w-full px-6 mt-20 pb-16 min-h-screen"
               >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-secondary mb-8">
@@ -581,7 +581,7 @@ function App() {
               {/* Desktop FAQs Section */}
               <section
                 id="desktop-faqs"
-                className="px-6 pb-16 pt-8 bg-gray-50 mx-6 rounded-lg mb-8 min-h-screen"
+                className="px-6 pb-16 pt-8 bg-gray-50 mx-6 mt-4 rounded-lg mb-8 min-h-screen"
               >
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-secondary mb-8">
