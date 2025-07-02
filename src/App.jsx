@@ -158,8 +158,7 @@ function App() {
                     className="fill-[#DFFE59] or stroke-[#DFFE59]"
                   />
                 </button>
-                // Replace the upload page dropdown menu section (around line
-                170) with this:
+
                 {isDropdownOpen && (
                   <ul
                     className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
