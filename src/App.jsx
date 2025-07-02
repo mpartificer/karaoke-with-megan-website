@@ -6,6 +6,7 @@ import BookingForm from "./components/BookingForm";
 import Upload from "./components/Upload";
 import Login from "./components/Login";
 import MenuDropdown from "./components/MenuDropDown";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 function ProtectedRoute({ children }) {
   const { user, isLoading } = useAuth();
