@@ -6,9 +6,10 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useState, useRef } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-function Upload({ user }) {
-  // Assuming user data is passed as prop
+function Upload() {
+  const { user } = useAuth();
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -185,11 +186,6 @@ function Upload({ user }) {
           <p className="text-lg text-accent">
             share the mems! gimme ur content!
           </p>
-          {user && (
-            <p className="text-sm text-accent mt-2">
-              Uploading as: {user.name} ({user.email})
-            </p>
-          )}
         </div>
 
         <div className="bg-accent rounded-lg shadow-lg p-8">
