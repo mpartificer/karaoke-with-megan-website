@@ -11,7 +11,7 @@ module.exports = {
         mytheme: {
           primary: "hsl(240, 100%, 22%)", // This should be closer to #000070
           secondary: "#FF5AE3",
-          accent: "#DFFE59",
+          accent: "hsl(67, 100%, 68%)", // This is #DFFE59 in HSL
           neutral: "#47E9F1",
           "base-100": "#ffffff",
           "base-200": "#f2f2f2",

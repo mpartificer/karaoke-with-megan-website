@@ -122,7 +122,10 @@ function App() {
                 className="btn m-1 justify-self-center bg-primary cursor-pointer"
                 onClick={handleToggleDropdown}
               >
-                <Menu color="#DFFE59" />
+                <Menu
+                  color="#DFFE59"
+                  className="fill-[#DFFE59] or stroke-[#DFFE59]"
+                />
               </button>
 
               {isDropdownOpen && (

@@ -1,16 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap");
 
 body {
   background-color: #000070; /* Keep the dark blue you want */
   font-family: "Fredoka", sans-serif;
 }
 
-/* Force primary color to match body background */
+/* Force all theme colors to match */
 [data-theme="mytheme"] {
-  --p: 240 100% 22%; /* HSL values for #000070 */
+  --p: 240 100% 22%; /* primary: hsl(240, 100%, 22%) */
+  --s: 312 100% 68%; /* secondary: #FF5AE3 */
+  --a: 67 100% 68%; /* accent: #DFFE59 */
+  --n: 186 88% 62%; /* neutral: #47E9F1 */
+  --b1: 0 0% 100%; /* base-100: #ffffff */
+  --b2: 0 0% 95%; /* base-200: #f2f2f2 */
+  --b3: 0 0% 90%; /* base-300: #e5e5e5 */
+  --bc: 215 28% 17%; /* base-content: #1f2937 */
+  --in: 198 93% 60%; /* info: #3abff8 */
+  --su: 158 64% 52%; /* success: #36d399 */
+  --wa: 43 96% 56%; /* warning: #fbbd23 */
+  --er: 0 91% 71%; /* error: #f87272 */
 }
 
 .bg-primary {
@@ -19,6 +30,29 @@ body {
 
 .text-primary {
   color: #000070 !important;
+}
+
+.bg-accent {
+  background-color: #dffe59 !important;
+}
+
+.text-accent {
+  color: #dffe59 !important;
+}
+
+.bg-secondary {
+  background-color: #ff5ae3 !important;
+}
+.text-secondary {
+  color: #ff5ae3 !important;
+}
+
+/* Neutral */
+.bg-neutral {
+  background-color: #47e9f1 !important;
+}
+.text-neutral {
+  color: #47e9f1 !important;
 }
 
 .logo {

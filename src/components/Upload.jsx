@@ -52,15 +52,14 @@ function Upload() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-primary py-8">
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-secondary mb-4">
-            Upload Your Photos & Videos
+            help me out & get featured!
           </h1>
-          <p className="text-lg text-gray-700">
-            Share your karaoke memories with us! Upload photos and videos from
-            our events.
+          <p className="text-lg text-accent">
+            share the mems! gimme ur content!
           </p>
         </div>
 
