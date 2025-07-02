@@ -142,7 +142,11 @@ function App() {
       <ProtectedRoute>
         <div>
           {/* Navigation for upload page */}
-          <div className="fixed top-0 left-0 right-0 z-50 w-full flex justify-center bg-primary py-2">
+          <div
+            className={`fixed top-0 left-0 right-0 z-50 w-full flex bg-primary py-2 px-4 ${
+              user ? "justify-between" : "justify-center"
+            } items-center`}
+          >
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigateTo("home")}
@@ -216,12 +220,12 @@ function App() {
                   </ul>
                 )}
               </div>
-              {user && (
-                <div className="text-secondary text-sm">
-                  Welcome, {user.name}!
-                </div>
-              )}
             </div>
+            {user && (
+              <div className="text-secondary text-sm">
+                Welcome, {user.name}!
+              </div>
+            )}
           </div>
           <div className="pt-16">
             <Upload />
@@ -246,7 +250,11 @@ function App() {
       {/* Mobile Layout */}
       <div className="lg:hidden">
         {/* Sticky menu bar */}
-        <div className="fixed top-0 left-0 right-0 z-50 w-full flex justify-between items-center bg-primary py-2 px-4">
+        <div
+          className={`fixed top-0 left-0 right-0 z-50 w-full flex bg-primary py-2 px-4 ${
+            user ? "justify-between" : "justify-center"
+          } items-center`}
+        >
           <div className="relative dropdown-container">
             <button
               className="btn m-1 justify-self-center bg-primary cursor-pointer"
@@ -543,7 +551,11 @@ function App() {
           {/* Right side - Content */}
           <div className="w-1/2 h-3/4 flex flex-col">
             {/* Sticky menu bar */}
-            <div className="sticky top-0 z-50 w-full flex justify-between items-center bg-primary py-2 px-4 flex-shrink-0">
+            <div
+              className={`sticky top-0 z-50 w-full flex bg-primary py-2 px-4 flex-shrink-0 ${
+                user ? "justify-between" : "justify-center"
+              } items-center`}
+            >
               <div className="relative dropdown-container">
                 <button
                   className="btn m-1 justify-self-center bg-primary cursor-pointer"

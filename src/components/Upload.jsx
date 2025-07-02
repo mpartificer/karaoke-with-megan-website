@@ -354,6 +354,14 @@ function Upload() {
               media @karaokewithmegan and if you don't follow us then you should
               go do it now!
             </li>
+            <li>
+              • btw i find the easiest way to do this is to add them one at a
+              time bc if one is too long it'll just stop and not doing anything,
+              whereas the smaller ones are a wayyyy shorter pause. oh, and also,
+              i am on an iPhone 14 and I can't upload a 2 minute long video so
+              your safest bet if you're finding it too long is to pick your
+              favorite minute of the song and upload that.
+            </li>
           </ul>
         </div>
       </div>
