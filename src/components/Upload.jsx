@@ -1,15 +1,41 @@
-import { Upload as UploadIcon, Camera, Video } from "lucide-react";
+import {
+  Upload as UploadIcon,
+  Camera,
+  Video,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
 import { useState, useRef } from "react";
 
-function Upload() {
+function Upload({ user }) {
+  // Assuming user data is passed as prop
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadResults, setUploadResults] = useState([]);
   const fileInputRef = useRef(null);
 
+  // File size limits (10MB for images, 50MB for videos)
+  const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
+  const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
+
   const handleFiles = (files) => {
-    const fileArray = Array.from(files).filter(
-      (file) => file.type.startsWith("image/") || file.type.startsWith("video/")
-    );
+    const fileArray = Array.from(files).filter((file) => {
+      const isImage = file.type.startsWith("image/");
+      const isVideo = file.type.startsWith("video/");
+      const sizeLimit = isImage ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE;
+
+      if (!isImage && !isVideo) return false;
+      if (file.size > sizeLimit) {
+        alert(
+          `File ${file.name} is too large. Max size: ${
+            isImage ? "10MB" : "50MB"
+          }`
+        );
+        return false;
+      }
+      return true;
+    });
     setSelectedFiles((prev) => [...prev, ...fileArray]);
   };
 
@@ -51,6 +77,104 @@ function Upload() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    const isVideo = file.type.startsWith("video/");
+
+    // Add transformations for resizing
+    const transformation = isVideo
+      ? "c_limit,w_1280,h_720,q_auto,f_auto"
+      : "c_limit,w_1920,h_1080,q_auto,f_auto";
+
+    formData.append("file", file);
+    formData.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    );
+    formData.append("folder", "karaoke-uploads");
+    formData.append("transformation", transformation);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${
+        import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+      }/${isVideo ? "video" : "image"}/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Cloudinary upload failed: ${response.statusText}`);
+    }
+
+    return await response.json();
+  };
+
+  const logToDatabase = async (uploadData, file) => {
+    const response = await fetch("/api/log-upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        image_url: uploadData.secure_url,
+        username: user?.name || "Unknown User",
+        user_email: user?.email || "unknown@email.com",
+        file_type: file.type.startsWith("image/") ? "image" : "video",
+        file_size: file.size,
+        cloudinary_public_id: uploadData.public_id,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Database logging failed: ${response.statusText}`);
+    }
+
+    return await response.json();
+  };
+
+  const handleUpload = async () => {
+    if (selectedFiles.length === 0) return;
+
+    setUploading(true);
+    setUploadResults([]);
+
+    const results = [];
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      try {
+        // Upload to Cloudinary
+        const cloudinaryResult = await uploadToCloudinary(file);
+
+        // Log to database
+        await logToDatabase(cloudinaryResult, file);
+
+        results.push({
+          fileName: file.name,
+          status: "success",
+          url: cloudinaryResult.secure_url,
+        });
+      } catch (error) {
+        console.error(`Upload failed for ${file.name}:`, error);
+        results.push({
+          fileName: file.name,
+          status: "error",
+          error: error.message,
+        });
+      }
+    }
+
+    setUploadResults(results);
+    setUploading(false);
+
+    // Clear selected files if all uploads were successful
+    if (results.every((result) => result.status === "success")) {
+      setSelectedFiles([]);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-primary py-8">
       <div className="max-w-4xl mx-auto px-6">
@@ -61,6 +185,11 @@ function Upload() {
           <p className="text-lg text-accent">
             share the mems! gimme ur content!
           </p>
+          {user && (
+            <p className="text-sm text-accent mt-2">
+              Uploading as: {user.name} ({user.email})
+            </p>
+          )}
         </div>
 
         <div className="bg-accent rounded-lg shadow-lg p-8">
@@ -82,6 +211,7 @@ function Upload() {
               accept="image/*,video/*"
               onChange={handleChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              disabled={uploading}
             />
 
             <div className="space-y-4">
@@ -101,14 +231,16 @@ function Upload() {
                 <p className="text-gray-500 mb-4">or</p>
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="bg-neutral text-primary px-6 py-3 rounded-lg font-semibold hover:bg-accent/80 transition-colors"
+                  disabled={uploading}
+                  className="bg-neutral text-primary px-6 py-3 rounded-lg font-semibold hover:bg-accent/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Browse Files
+                  {uploading ? "Uploading..." : "Browse Files"}
                 </button>
               </div>
 
               <p className="text-sm text-gray-500">
-                Supported: JPG, PNG, GIF, MP4, MOV, AVI (Max 50MB per file)
+                Supported: JPG, PNG, GIF, MP4, MOV, AVI (Max 10MB images, 50MB
+                videos)
               </p>
             </div>
           </div>
@@ -141,7 +273,8 @@ function Upload() {
                     </div>
                     <button
                       onClick={() => removeFile(index)}
-                      className="text-red-500 hover:text-red-700 font-semibold"
+                      disabled={uploading}
+                      className="text-red-500 hover:text-red-700 font-semibold disabled:opacity-50"
                     >
                       Remove
                     </button>
@@ -150,9 +283,51 @@ function Upload() {
               </div>
 
               <div className="mt-6 text-center">
-                <button className="bg-secondary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-secondary/90 transition-colors">
-                  Upload Files
+                <button
+                  onClick={handleUpload}
+                  disabled={uploading || selectedFiles.length === 0}
+                  className="bg-secondary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-secondary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {uploading ? "Uploading..." : "Upload Files"}
                 </button>
+              </div>
+            </div>
+          )}
+
+          {uploadResults.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
+                Upload Results
+              </h3>
+              <div className="space-y-3">
+                {uploadResults.map((result, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-center space-x-3 p-4 rounded-lg ${
+                      result.status === "success" ? "bg-green-50" : "bg-red-50"
+                    }`}
+                  >
+                    {result.status === "success" ? (
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <AlertCircle className="h-5 w-5 text-red-500" />
+                    )}
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-700">
+                        {result.fileName}
+                      </p>
+                      {result.status === "success" ? (
+                        <p className="text-sm text-green-600">
+                          Uploaded successfully!
+                        </p>
+                      ) : (
+                        <p className="text-sm text-red-600">
+                          Error: {result.error}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
