@@ -1,864 +1,366 @@
-import { useState, useEffect, useRef } from "react";
-import { Menu, Home } from "lucide-react";
-import logo from "./assets/IMG_0682.JPEG";
-import insta from "./assets/insta.png";
-import BookingForm from "./components/BookingForm";
-import Upload from "./components/Upload";
-import Login from "./components/Login";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import {
+  Upload as UploadIcon,
+  Camera,
+  Video,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
+import { useState, useRef } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
-// Protected Route Component
-function ProtectedRoute({ children }) {
-  const { user, isLoading } = useAuth();
+function Upload() {
+  const { user } = useAuth();
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [dragActive, setDragActive] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadResults, setUploadResults] = useState([]);
+  const fileInputRef = useRef(null);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-primary flex items-center justify-center">
-        <div className="text-secondary text-xl">Loading...</div>
-      </div>
-    );
-  }
+  // File size limits (10MB for images, 50MB for videos)
+  const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
+  const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
 
-  if (!user) {
-    return <Login />;
-  }
+  const handleFiles = (files) => {
+    const fileArray = Array.from(files).filter((file) => {
+      const isImage = file.type.startsWith("image/");
+      const isVideo = file.type.startsWith("video/");
+      const sizeLimit = isImage ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE;
 
-  return children;
-}
-
-// Main App Component with Hash Router
-function App() {
-  const [count, setCount] = useState(0);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState("home");
-  const scrollContainerRef = useRef(null);
-  const { user, logout } = useAuth();
-
-  // Hash router effect
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.slice(1); // Remove the #
-      setCurrentPage(hash || "home");
-    };
-
-    // Set initial page based on hash
-    handleHashChange();
-
-    // Listen for hash changes
-    window.addEventListener("hashchange", handleHashChange);
-
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange);
-    };
-  }, []);
-
-  const navigateTo = (page) => {
-    window.location.hash = page;
-    setCurrentPage(page);
-    setIsDropdownOpen(false);
+      if (!isImage && !isVideo) return false;
+      if (file.size > sizeLimit) {
+        alert(
+          `File ${file.name} is too large. Max size: ${
+            isImage ? "10MB" : "50MB"
+          }`
+        );
+        return false;
+      }
+      return true;
+    });
+    setSelectedFiles((prev) => [...prev, ...fileArray]);
   };
 
-  const handleToggleDropdown = () => {
-    setIsDropdownOpen((prev) => !prev);
-  };
-
-  const handleMenuClick = (sectionId) => {
-    // Close dropdown first
-    setIsDropdownOpen(false);
-
-    // If we're not on home page, navigate to home first
-    if (currentPage !== "home") {
-      navigateTo("home");
-      // Wait for page to load then scroll
-      setTimeout(() => scrollToSection(sectionId), 100);
-    } else {
-      scrollToSection(sectionId);
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    navigateTo("home");
-    setIsDropdownOpen(false);
-  };
-
-  const scrollToSection = (sectionId) => {
-    setTimeout(() => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        const headerHeight = 80; // Adjust this value based on your header height
-
-        // Check if we're on desktop (large screen)
-        const isDesktop = window.innerWidth >= 1024;
-
-        if (isDesktop && scrollContainerRef.current) {
-          // For desktop: scroll within the container
-          const containerRect =
-            scrollContainerRef.current.getBoundingClientRect();
-          const elementRect = element.getBoundingClientRect();
-          const scrollTop = scrollContainerRef.current.scrollTop;
-
-          const offsetPosition =
-            scrollTop + (elementRect.top - containerRect.top) - headerHeight;
-
-          scrollContainerRef.current.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
-        } else {
-          // For mobile: scroll the window
-          const elementPosition =
-            element.getBoundingClientRect().top + window.pageYOffset;
-          const offsetPosition = elementPosition - headerHeight;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
-        }
-      }
-    }, 100);
-  };
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isDropdownOpen && !event.target.closest(".dropdown-container")) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [isDropdownOpen]);
-
-  // Render Login page for unauthenticated users trying to access upload
-  if (currentPage === "login") {
-    return <Login />;
-  }
-
-  // Render Upload page - now protected
-  if (currentPage === "upload") {
-    return (
-      <ProtectedRoute>
-        <div>
-          {/* Navigation for upload page */}
-          <div className="fixed top-0 left-0 right-0 z-50 w-full flex justify-center bg-primary py-2">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigateTo("home")}
-                className="text-secondary hover:text-accent font-semibold"
-              >
-                <Home />
-              </button>
-              <div className="relative dropdown-container">
-                <button
-                  className="btn m-1 justify-self-center bg-primary cursor-pointer"
-                  onClick={handleToggleDropdown}
-                >
-                  <Menu
-                    color="#DFFE59"
-                    className="fill-[#DFFE59] or stroke-[#DFFE59]"
-                  />
-                </button>
-
-                {isDropdownOpen && (
-                  <ul className="absolute top-full left-1/2 transform -translate-x-1/2 border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1">
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("events")}
-                      >
-                        events
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("private-events")}
-                      >
-                        request a private event
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("about")}
-                      >
-                        about us
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("faqs")}
-                      >
-                        FAQs
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => navigateTo("upload")}
-                      >
-                        upload your photos & videos
-                      </button>
-                    </li>
-                    {user && (
-                      <li>
-                        <button
-                          className="text-red-400 w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-red-600 hover:text-white rounded"
-                          onClick={handleLogout}
-                        >
-                          logout
-                        </button>
-                      </li>
-                    )}
-                  </ul>
-                )}
-              </div>
-              {user && (
-                <div className="text-secondary text-sm">
-                  Welcome, {user.name}!
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="pt-16">
-            <Upload />
-          </div>
-        </div>
-      </ProtectedRoute>
-    );
-  }
-
-  // Modified menu items to handle authentication
-  const handleUploadClick = () => {
-    if (!user) {
-      navigateTo("login");
-    } else {
-      navigateTo("upload");
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFiles(e.dataTransfer.files);
     }
   };
 
-  // Render main home page (rest of your existing JSX remains the same, just updating the upload button clicks)
+  const handleChange = (e) => {
+    e.preventDefault();
+    if (e.target.files && e.target.files[0]) {
+      handleFiles(e.target.files);
+    }
+  };
+
+  const removeFile = (index) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
+
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    const isVideo = file.type.startsWith("video/");
+
+    // Add transformations for resizing
+    const transformation = isVideo
+      ? "c_limit,w_1280,h_720,q_auto,f_auto"
+      : "c_limit,w_1920,h_1080,q_auto,f_auto";
+
+    formData.append("file", file);
+    formData.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    );
+    formData.append("transformation", transformation);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${
+        import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+      }/${isVideo ? "video" : "image"}/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Cloudinary upload failed: ${response.statusText}`);
+    }
+
+    return await response.json();
+  };
+
+  const logToDatabase = async (uploadData, file) => {
+    const response = await fetch("/api/log-upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        image_url: uploadData.secure_url,
+        username: user?.name || "Unknown User",
+        user_email: user?.email || "unknown@email.com",
+        file_type: file.type.startsWith("image/") ? "image" : "video",
+        file_size: file.size,
+        cloudinary_public_id: uploadData.public_id,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Database logging failed: ${response.statusText}`);
+    }
+
+    return await response.json();
+  };
+
+  const handleUpload = async () => {
+    if (selectedFiles.length === 0) return;
+
+    setUploading(true);
+    setUploadResults([]);
+
+    const results = [];
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      try {
+        // Upload to Cloudinary
+        const cloudinaryResult = await uploadToCloudinary(file);
+
+        // Log to database
+        await logToDatabase(cloudinaryResult, file);
+
+        results.push({
+          fileName: file.name,
+          status: "success",
+          url: cloudinaryResult.secure_url,
+        });
+      } catch (error) {
+        console.error(`Upload failed for ${file.name}:`, error);
+        results.push({
+          fileName: file.name,
+          status: "error",
+          error: error.message,
+        });
+      }
+    }
+
+    setUploadResults(results);
+    setUploading(false);
+
+    // Clear selected files if all uploads were successful
+    if (results.every((result) => result.status === "success")) {
+      setSelectedFiles([]);
+    }
+  };
+
   return (
-    <>
-      {/* Mobile Layout */}
-      <div className="lg:hidden">
-        {/* Sticky menu bar */}
-        <div className="fixed top-0 left-0 right-0 z-50 w-full flex justify-between items-center bg-primary py-2 px-4">
-          <div className="relative dropdown-container">
-            <button
-              className="btn m-1 justify-self-center bg-primary cursor-pointer"
-              onClick={handleToggleDropdown}
-            >
-              <Menu color="#DFFE59" />
-            </button>
-
-            {isDropdownOpen && (
-              <ul className="absolute top-full left-1/2 transform -translate-x-1/2 border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1">
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={() => handleMenuClick("events")}
-                  >
-                    events
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={() => handleMenuClick("private-events")}
-                  >
-                    request a private event
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={() => handleMenuClick("about")}
-                  >
-                    about us
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={() => handleMenuClick("faqs")}
-                  >
-                    FAQs
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={handleUploadClick}
-                  >
-                    upload your photos & videos
-                  </button>
-                </li>
-                {user && (
-                  <li>
-                    <button
-                      className="text-red-400 w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-red-600 hover:text-white rounded"
-                      onClick={handleLogout}
-                    >
-                      logout
-                    </button>
-                  </li>
-                )}
-              </ul>
-            )}
-          </div>
-
+    <div className="min-h-screen bg-primary py-8">
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-secondary mb-4">
+            help me out & get featured!
+          </h1>
+          <p className="text-lg text-accent">
+            share the mems! gimme ur content!
+          </p>
           {user && (
-            <div className="text-secondary text-sm">Hi, {user.name}!</div>
+            <p className="text-sm text-accent mt-2">
+              Uploading as: {user.name} ({user.email})
+            </p>
           )}
         </div>
 
-        {/* Rest of your existing mobile layout JSX stays the same */}
-        {/* I'll include the key sections but keep the same structure */}
+        <div className="bg-accent rounded-lg shadow-lg p-8">
+          <div
+            className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+              dragActive
+                ? "border-accent bg-accent/10"
+                : "border-gray-300 hover:border-accent"
+            }`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept="image/*,video/*"
+              onChange={handleChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              disabled={uploading}
+            />
 
-        {/* Main content with top padding to account for fixed header */}
-        <div className="flex flex-col justify-start min-h-screen items-center">
-          <div className="">
-            <a target="_blank">
-              <img
-                src={logo}
-                className="w-full"
-                alt="Karaoke with Megan logo"
-              />
-            </a>
-          </div>
-
-          {/* All your existing sections remain exactly the same */}
-          {/* Events Section */}
-          <section id="events" className="w-full max-w-4xl mx-auto px-6 py-8">
-            <div className="text-center">
-              <h2 className="text-4xl font-bold text-secondary mb-8">events</h2>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-accent rounded-lg shadow-lg p-6">
-                  <h3 className="text-xl font-semibold text-primary mb-3">
-                    Thursdays at Erin's
-                  </h3>
-                  <p className="text-primary mb-4">
-                    Join us every Thursday night for karaoke!
-                  </p>
-                  <p className="text-sm text-primary">Date: Every Thursday</p>
-                  <p className="text-sm text-primary">Time: 11:00 PM - close</p>
-                  <p className="text-sm text-primary">Location: Erin's Pub</p>
+            <div className="space-y-4">
+              <div className="flex justify-center space-x-4">
+                <div className="bg-neutral rounded-full p-3">
+                  <Camera className="h-8 w-8 text-primary" />
                 </div>
-                <div className="bg-accent rounded-lg shadow-lg p-6">
-                  <h3 className="text-xl font-semibold text-primary mb-3">
-                    Erin's Anniversary Screech In
-                  </h3>
-                  <p className="text-primary mb-4">
-                    In collaboration with Fogged Up Comedy, we will be hosting a
-                    traditional Newfoundland Screech In to celebrate 3 years of
-                    Erin's new ownership! Contact our instagram
-                    @karaokewithmegan to claim your spot!
-                  </p>
-                  <p className="text-sm text-primary">Date: July 24, 2025</p>
-                  <p className="text-sm text-primary">Time: 11:00 PM</p>
-                  <p className="text-sm text-primary">Location: Erin's Pub</p>
-                </div>
-                <div className="bg-accent rounded-lg shadow-lg p-6">
-                  <h3 className="text-xl font-semibold text-primary mb-3">
-                    Christmas in July{" "}
-                  </h3>
-                  <p className="text-primary mb-4">
-                    Join us for extended anniversary celebrations with karaoke
-                    from 9PM to 1AM and then dance the night away with a
-                    Christmas dance party.{" "}
-                  </p>
-                  <p className="text-sm text-primary">Date: July 27, 2025</p>
-                  <p className="text-sm text-primary">
-                    Time: 9:00 PM - 3:00 AM
-                  </p>
-                  <p className="text-sm text-primary">Location: Erin's Pub</p>
+                <div className="bg-neutral rounded-full p-3">
+                  <Video className="h-8 w-8 text-primary" />
                 </div>
               </div>
-            </div>
-          </section>
 
-          {/* Private Events Section */}
-          <section
-            id="private-events"
-            className="max-w-4xl px-6 ml-4 mr-4 mb-8 py-16 bg-secondary rounded-lg"
-          >
-            <div className="text-center">
-              <h2 className="text-4xl font-bold text-primary mb-8">
-                request a private event
-              </h2>
-              <div className="max-w-2xl mx-auto">
-                <p className="text-lg text-gray-700 mb-8">
-                  Looking to host a special celebration? We offer private
-                  karaoke events for birthdays, corporate parties, and other
-                  special occasions.
+              <div>
+                <p className="text-xl font-semibold text-gray-700 mb-2">
+                  Drag and drop your files here
                 </p>
-                <BookingForm />
-              </div>
-            </div>
-          </section>
-
-          {/* About Us Section */}
-          <section
-            id="about"
-            className="w-full max-w-4xl mx-auto mt-8 px-6 pb-16"
-          >
-            <div className="text-center">
-              <h2 className="text-4xl font-bold text-secondary mb-8">
-                about us
-              </h2>
-              <div className="max-w-3xl mx-auto bg-secondary rounded-lg p-6">
-                <p className="text-lg text-gray-700 font-semibold mb-6">
-                  Hi, I'm Megan! You can often find me in the host's chair at
-                  Erin's Pub on Thursdays. My goal has been and will always be
-                  to create a safe, fun, and inclusive event in the downtown
-                  space. Everyone should get to feel like a star, and no one
-                  feels alone on stage.
-                </p>
-                <a
-                  href="https://www.instagram.com/karaokewithmegan?igsh=MTB1d3c0bjg1OHhxeg%3D%3D&utm_source=qr"
-                  target="_blank"
-                >
-                  <img
-                    src={insta}
-                    className="w-8 h-8 mt-4 justify-self-center"
-                    alt="follow us on instagram!"
-                  />
-                </a>
-                <div className="grid md:grid-cols-3 gap-8 mt-12">
-                  <div className="text-center">
-                    <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <span className="text-2xl">🎤</span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-primary mb-2">
-                      Professional Equipment
-                    </h3>
-                    <p className="text-gray-600">
-                      4 screens, 2 microphones, and a sound system that can
-                      handle a crowd!
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <span className="text-2xl">🎵</span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-primary mb-2">
-                      Huge Song Library
-                    </h3>
-                    <p className="text-gray-600">
-                      We get our tracks from Youtube, so the songs you practice
-                      on are exactly what you will sing with!
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <span className="text-2xl">🎉</span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-primary mb-2">
-                      Fun Atmosphere
-                    </h3>
-                    <p className="text-gray-600">
-                      Inclusive environment for performers of all levels!
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* FAQs Section */}
-          <section
-            id="faqs"
-            className="max-w-4xl mr-4 ml-4 rounded-lg px-6 py-16 bg-gray-50"
-          >
-            <div className="text-center">
-              <h2 className="text-4xl font-bold text-secondary mb-8">faqs</h2>
-              <div className="max-w-3xl mx-auto text-left">
-                <div className="space-y-6">
-                  <div className="bg-white rounded-lg shadow-lg p-6">
-                    <h3 className="text-xl font-semibold text-primary mb-3">
-                      How much to bump my songs up?{" "}
-                    </h3>
-                    <p className="text-gray-700">
-                      Bribes start at $50! Sure, it is a high price to pay, but
-                      I feel like if I'm going to compromise on the system, it
-                      has to be worth my while!
-                    </p>
-                  </div>
-                  <div className="bg-white rounded-lg shadow-lg p-6">
-                    <h3 className="text-xl font-semibold text-primary mb-3">
-                      What if I'm nervous about singing?
-                    </h3>
-                    <p className="text-gray-700">
-                      Don't worry! We have a very supportive crowd and encourage
-                      singers of all levels. You can also start with group songs
-                      or duets if that makes you more comfortable.
-                    </p>
-                  </div>
-                  <div className="bg-white rounded-lg shadow-lg p-6">
-                    <h3 className="text-xl font-semibold text-primary mb-3">
-                      Can I request songs not in your library?
-                    </h3>
-                    <p className="text-gray-700">
-                      You certainly can! If there's no karaoke version of the
-                      song you want on Youtube, feel free to sing along to the
-                      regular track if you're comfortable
-                    </p>
-                  </div>
-                  <div className="bg-white rounded-lg shadow-lg p-6">
-                    <h3 className="text-xl font-semibold text-primary mb-3">
-                      What are your age restrictions?
-                    </h3>
-                    <p className="text-gray-700">
-                      19+, but this is flexible for private events.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-
-      {/* Desktop Layout */}
-      <div className="flex w-screen h-screen overflow-hidden pt-12 justify-center align-center">
-        <div className="hidden lg:flex h-screen w-3/4">
-          {/* Left side - Image */}
-          <div className="w-1/2 h-3/4">
-            <a
-              target="_blank"
-              href="https://www.instagram.com/betterpleasure?igsh=MTB6dGFtMHJxbncyMw=="
-            >
-              <img
-                src={logo}
-                className="w-full"
-                alt="Karaoke with Megan logo, made by the bestie @betterpleasure"
-              />
-            </a>
-          </div>
-
-          {/* Right side - Content */}
-          <div className="w-1/2 h-3/4 flex flex-col">
-            {/* Sticky menu bar */}
-            <div className="sticky top-0 z-50 w-full flex justify-between items-center bg-primary py-2 px-4 flex-shrink-0">
-              <div className="relative dropdown-container">
+                <p className="text-gray-500 mb-4">or</p>
                 <button
-                  className="btn m-1 justify-self-center bg-primary cursor-pointer"
-                  onClick={handleToggleDropdown}
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="bg-neutral text-primary px-6 py-3 rounded-lg font-semibold hover:bg-accent/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Menu color="#DFFE59" />
+                  {uploading ? "Uploading..." : "Browse Files"}
                 </button>
-
-                {isDropdownOpen && (
-                  <ul className="absolute top-full left-1/2 transform -translate-x-1/2 border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1">
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("desktop-events")}
-                      >
-                        events
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() =>
-                          handleMenuClick("desktop-private-events")
-                        }
-                      >
-                        request a private event
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("desktop-about")}
-                      >
-                        about us
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("desktop-faqs")}
-                      >
-                        FAQs
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={handleUploadClick}
-                      >
-                        upload your photos & videos
-                      </button>
-                    </li>
-                    {user && (
-                      <li>
-                        <button
-                          className="text-red-400 w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-red-600 hover:text-white rounded"
-                          onClick={handleLogout}
-                        >
-                          logout
-                        </button>
-                      </li>
-                    )}
-                  </ul>
-                )}
               </div>
 
-              {user && (
-                <div className="text-secondary text-sm">
-                  Welcome, {user.name}!
-                </div>
-              )}
-            </div>
-
-            {/* Scrollable content */}
-            <div
-              ref={scrollContainerRef}
-              className="flex-1 overflow-y-auto overflow-x-hidden"
-            >
-              {/* Desktop Events Section */}
-              <section
-                id="desktop-events"
-                className="w-full px-6 pb-16 pt-8 min-h-screen"
-              >
-                <div className="text-center">
-                  <h2 className="text-4xl font-bold text-secondary mb-8">
-                    events
-                  </h2>
-                  <div className="grid gap-6">
-                    <div className="bg-accent rounded-lg shadow-lg p-6">
-                      <h3 className="text-xl font-semibold text-primary mb-3">
-                        Thursdays at Erin's
-                      </h3>
-                      <p className="text-primary mb-4">
-                        Join us every Thursday night for karaoke!
-                      </p>
-                      <p className="text-sm text-primary">
-                        Date: Every Thursday
-                      </p>
-                      <p className="text-sm text-primary">
-                        Time: 11:00 PM - close
-                      </p>
-                      <p className="text-sm text-primary">
-                        Location: Erin's Pub
-                      </p>
-                    </div>
-                    <div className="bg-accent rounded-lg shadow-lg p-6">
-                      <h3 className="text-xl font-semibold text-primary mb-3">
-                        Erin's Anniversary Screech In
-                      </h3>
-                      <p className="text-primary mb-4">
-                        In collaboration with Fogged Up Comedy, we will be
-                        hosting a traditional Newfoundland Screech In to
-                        celebrate 3 years of Erin's new ownership! Contact our
-                        instagram @karaokewithmegan to claim your spot!
-                      </p>
-                      <p className="text-sm text-primary">
-                        Date: July 24, 2025
-                      </p>
-                      <p className="text-sm text-primary">Time: 11:00 PM</p>
-                      <p className="text-sm text-primary">
-                        Location: Erin's Pub
-                      </p>
-                    </div>
-                    <div className="bg-accent rounded-lg shadow-lg p-6">
-                      <h3 className="text-xl font-semibold text-primary mb-3">
-                        Christmas in July{" "}
-                      </h3>
-                      <p className="text-primary mb-4">
-                        Join us for extended anniversary celebrations with
-                        karaoke from 9PM to 1AM and then dance the night away
-                        with a Christmas dance party.{" "}
-                      </p>
-                      <p className="text-sm text-primary">
-                        Date: July 27, 2025
-                      </p>
-                      <p className="text-sm text-primary">
-                        Time: 9:00 PM - 3:00 AM
-                      </p>
-                      <p className="text-sm text-primary">
-                        Location: Erin's Pub
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* Desktop Private Events Section */}
-              <section
-                id="desktop-private-events"
-                className="px-6 mb-8 pb-16 pt-8 bg-secondary rounded-lg mx-6 min-h-screen"
-              >
-                <div className="text-center">
-                  <h2 className="text-4xl font-bold text-primary mb-8">
-                    request a private event
-                  </h2>
-                  <div className="max-w-2xl mx-auto">
-                    <p className="text-lg text-gray-700 mb-8">
-                      Looking to host a special celebration? We offer private
-                      karaoke events for birthdays, corporate parties, and other
-                      special occasions.
-                    </p>
-                    <BookingForm />
-                  </div>
-                </div>
-              </section>
-
-              {/* Desktop About Us Section */}
-              <section
-                id="desktop-about"
-                className="w-full px-6 mt-16 pb-16 min-h-screen"
-              >
-                <div className="text-center">
-                  <h2 className="text-4xl font-bold text-secondary mb-8">
-                    about us
-                  </h2>
-                  <div className="mx-auto bg-secondary rounded-lg p-6">
-                    <p className="text-lg text-primary font-semibold mb-6">
-                      Hi, I'm Megan! You can often find me in the host's chair
-                      at Erin's Pub in St. John's, NL on Thursdays. My goal has
-                      been and will always be to create a safe, fun, and
-                      inclusive event in the downtown space. Everyone should get
-                      to feel like a star, and no one feels alone on stage.
-                    </p>
-                    <a
-                      href="https://www.instagram.com/karaokewithmegan?igsh=MTB1d3c0bjg1OHhxeg%3D%3D&utm_source=qr"
-                      target="_blank"
-                    >
-                      <img
-                        src={insta}
-                        className="w-8 h-8 mt-4 justify-self-center"
-                        alt="follow us on instagram! made by Freepik from flaticon"
-                      />
-                    </a>
-                    <div className="grid gap-8 mt-12">
-                      <div className="text-center">
-                        <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                          <span className="text-2xl">🎤</span>
-                        </div>
-                        <h3 className="text-xl font-semibold text-primary mb-2">
-                          Professional Equipment
-                        </h3>
-                        <p className="text-primary">
-                          4 screens, 2 microphones, and a sound system that can
-                          handle a crowd!
-                        </p>
-                      </div>
-                      <div className="text-center">
-                        <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                          <span className="text-2xl">🎵</span>
-                        </div>
-                        <h3 className="text-xl font-semibold text-primary mb-2">
-                          Huge Song Library
-                        </h3>
-                        <p className="text-primary">
-                          We get our tracks from Youtube, so the songs you
-                          practice on are exactly what you will sing with!
-                        </p>
-                      </div>
-                      <div className="text-center">
-                        <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                          <span className="text-2xl">🎉</span>
-                        </div>
-                        <h3 className="text-xl font-semibold text-primary mb-2">
-                          Fun Atmosphere
-                        </h3>
-                        <p className="text-primary">
-                          Inclusive environment for performers of all levels!
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* Desktop FAQs Section */}
-              <section
-                id="desktop-faqs"
-                className="px-6 pb-16 pt-8 bg-gray-50 mx-6 rounded-lg mb-8 min-h-screen"
-              >
-                <div className="text-center">
-                  <h2 className="text-4xl font-bold text-secondary mb-8">
-                    faqs
-                  </h2>
-                  <div className="text-left">
-                    <div className="space-y-6">
-                      <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h3 className="text-xl font-semibold text-primary mb-3">
-                          How long will my song take?
-                        </h3>
-                        <p className="text-primary">
-                          That really depends on how many people are there and
-                          how many songs you want to sing! I try to make sure
-                          everyone gets a turn per round, and often I will do a
-                          host tax (aka, sing a song!) as a marker that we're at
-                          the top of the round. I have found this is the fairest
-                          way to ensure that everyone gets a chance to perform
-                        </p>
-                      </div>
-                      <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h3 className="text-xl font-semibold text-primary mb-3">
-                          How much to bump my songs up?{" "}
-                        </h3>
-                        <p className="text-primary">
-                          Bribes start at $50! Sure, it is a high price to pay,
-                          but I feel like if I'm going to compromise on the
-                          system, it has to be worth my while!
-                        </p>
-                      </div>
-                      <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h3 className="text-xl font-semibold text-primary mb-3">
-                          What if I'm nervous about singing?
-                        </h3>
-                        <p className="text-primary">
-                          Don't worry! We have a very supportive crowd and
-                          encourage singers of all levels. You can also start
-                          with group songs or duets if that makes you more
-                          comfortable.
-                        </p>
-                      </div>
-                      <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h3 className="text-xl font-semibold text-primary mb-3">
-                          Can I request songs not in your library?
-                        </h3>
-                        <p className="text-primary">
-                          You certainly can! If there's no karaoke version of
-                          the song you want on Youtube, feel free to sing along
-                          to the regular track if you're comfortable
-                        </p>
-                      </div>
-                      <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h3 className="text-xl font-semibold text-primary mb-3">
-                          What are your age restrictions?
-                        </h3>
-                        <p className="text-primary">
-                          19+, but this is flexible for private events.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
+              <p className="text-sm text-gray-500">
+                Supported: JPG, PNG, GIF, MP4, MOV, AVI (Max 10MB images, 50MB
+                videos)
+              </p>
             </div>
           </div>
+
+          {selectedFiles.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
+                Selected Files ({selectedFiles.length})
+              </h3>
+              <div className="space-y-3">
+                {selectedFiles.map((file, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between bg-gray-50 p-4 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="bg-accent rounded p-2">
+                        {file.type.startsWith("image/") ? (
+                          <Camera className="h-5 w-5 text-primary" />
+                        ) : (
+                          <Video className="h-5 w-5 text-primary" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-700">{file.name}</p>
+                        <p className="text-sm text-gray-500">
+                          {formatFileSize(file.size)}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => removeFile(index)}
+                      disabled={uploading}
+                      className="text-red-500 hover:text-red-700 font-semibold disabled:opacity-50"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 text-center">
+                <button
+                  onClick={handleUpload}
+                  disabled={uploading || selectedFiles.length === 0}
+                  className="bg-secondary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-secondary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {uploading ? "Uploading..." : "Upload Files"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {uploadResults.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
+                Upload Results
+              </h3>
+              <div className="space-y-3">
+                {uploadResults.map((result, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-center space-x-3 p-4 rounded-lg ${
+                      result.status === "success" ? "bg-green-50" : "bg-red-50"
+                    }`}
+                  >
+                    {result.status === "success" ? (
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <AlertCircle className="h-5 w-5 text-red-500" />
+                    )}
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-700">
+                        {result.fileName}
+                      </p>
+                      {result.status === "success" ? (
+                        <p className="text-sm text-green-600">
+                          Uploaded successfully!
+                        </p>
+                      ) : (
+                        <p className="text-sm text-red-600">
+                          Error: {result.error}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-8 bg-accent rounded-lg shadow-lg p-6">
+          <h3 className="text-xl font-semibold text-primary mb-4">
+            submission guidelines
+          </h3>
+          <ul className="space-y-2 text-primary">
+            <li>
+              • please only upload content from our karaoke event! i'm operating
+              on the free database tier over here, okay?
+            </li>
+            <li>
+              • consent is gorgeous in all things! make sure you have permission
+              from everyone visible in your uploads!
+            </li>
+            <li>
+              • don't be gross - you're literally talking to megan right now, i
+              built this thing, and if you send me dick pics so help me god i
+              will find you and press charges 😙
+            </li>
+            <li>
+              • by uploading, you give us permission to share on our social
+              media @karaokewithmegan and if you don't follow us then you should
+              go do it now!
+            </li>
+          </ul>
         </div>
       </div>
-    </>
-  );
-}
-function AppWithAuth() {
-  return (
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    </div>
   );
 }
 
-export default AppWithAuth;
+export default Upload;
