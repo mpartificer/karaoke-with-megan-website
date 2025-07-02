@@ -148,12 +148,6 @@ function App() {
             } items-center`}
           >
             <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigateTo("home")}
-                className="text-secondary hover:text-accent font-semibold"
-              >
-                <Home />
-              </button>
               <div className="relative dropdown-container">
                 <button
                   className="btn m-1 justify-self-center bg-primary cursor-pointer"
