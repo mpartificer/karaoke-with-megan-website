@@ -158,9 +158,7 @@ function App() {
                     className="fill-[#DFFE59] or stroke-[#DFFE59]"
                   />
                 </button>
-                // Replace the dropdown ul elements in your code with this
-                updated version // This applies to all three instances in your
-                code (mobile, upload page, desktop)
+
                 {isDropdownOpen && (
                   <ul
                     className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
@@ -264,9 +262,7 @@ function App() {
             >
               <Menu color="#DFFE59" />
             </button>
-            // Replace the dropdown ul elements in your code with this updated
-            version // This applies to all three instances in your code (mobile,
-            upload page, desktop)
+
             {isDropdownOpen && (
               <ul
                 className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
@@ -573,9 +569,7 @@ function App() {
                 >
                   <Menu color="#DFFE59" />
                 </button>
-                // Replace the dropdown ul elements in your code with this
-                updated version // This applies to all three instances in your
-                code (mobile, upload page, desktop)
+
                 {isDropdownOpen && (
                   <ul
                     className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
