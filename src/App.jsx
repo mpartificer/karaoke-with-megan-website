@@ -5,7 +5,7 @@ import insta from "./assets/insta.png";
 import BookingForm from "./components/BookingForm";
 import Upload from "./components/Upload";
 import Login from "./components/Login";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import MenuDropdown from "./components/MenuDropDown";
 
 function ProtectedRoute({ children }) {
   const { user, isLoading } = useAuth();
@@ -142,89 +142,13 @@ function App() {
       <ProtectedRoute>
         <div>
           {/* Navigation for upload page */}
-          <div
-            className={`fixed top-0 left-0 right-0 z-50 w-full flex bg-primary py-2 px-4 ${
-              user ? "justify-between" : "justify-center"
-            } items-center`}
-          >
-            <div className="flex items-center space-x-4">
-              <div className="relative dropdown-container">
-                <button
-                  className="btn m-1 justify-self-center bg-primary cursor-pointer"
-                  onClick={handleToggleDropdown}
-                >
-                  <Menu
-                    color="#DFFE59"
-                    className="fill-[#DFFE59] or stroke-[#DFFE59]"
-                  />
-                </button>
-
-                {isDropdownOpen && (
-                  <ul
-                    className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
-                      user ? "left-0" : "left-1/2 transform -translate-x-1/2"
-                    }`}
-                  >
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => navigateTo("home")} // Changed from handleMenuClick
-                      >
-                        events
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => navigateTo("home")} // Changed from handleMenuClick
-                      >
-                        request a private event
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => navigateTo("home")} // Changed from handleMenuClick
-                      >
-                        about us
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => navigateTo("home")} // Changed from handleMenuClick
-                      >
-                        FAQs
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => navigateTo("upload")}
-                      >
-                        upload your photos & videos
-                      </button>
-                    </li>
-                    {user && (
-                      <li>
-                        <button
-                          className="text-red-400 w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-red-600 hover:text-white rounded"
-                          onClick={handleLogout}
-                        >
-                          logout
-                        </button>
-                      </li>
-                    )}
-                  </ul>
-                )}
-              </div>
-            </div>
-            {user && (
-              <div className="text-secondary text-sm">
-                Welcome, {user.name}!
-              </div>
-            )}
-          </div>
+          <MenuDropdown
+            user={user}
+            onNavigate={navigateTo}
+            onMenuClick={handleMenuClick}
+            onLogout={handleLogout}
+            currentPage={currentPage}
+          />
           <div className="pt-16">
             <Upload />
           </div>
@@ -248,85 +172,13 @@ function App() {
       {/* Mobile Layout */}
       <div className="lg:hidden">
         {/* Sticky menu bar */}
-        <div
-          className={`fixed top-0 left-0 right-0 z-50 w-full flex bg-primary py-2 px-4 ${
-            user ? "justify-between" : "justify-center"
-          } items-center`}
-        >
-          <div className="relative dropdown-container">
-            <button
-              className="btn m-1 justify-self-center bg-primary cursor-pointer"
-              onClick={handleToggleDropdown}
-            >
-              <Menu color="#DFFE59" />
-            </button>
-
-            {isDropdownOpen && (
-              <ul
-                className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
-                  user
-                    ? "left-0" // Left-aligned when user is authenticated
-                    : "left-1/2 transform -translate-x-1/2" // Centered when no user
-                }`}
-              >
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={() => handleMenuClick("events")}
-                  >
-                    events
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={() => handleMenuClick("private-events")}
-                  >
-                    request a private event
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={() => handleMenuClick("about")}
-                  >
-                    about us
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={() => handleMenuClick("faqs")}
-                  >
-                    FAQs
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                    onClick={handleUploadClick}
-                  >
-                    upload your photos & videos
-                  </button>
-                </li>
-                {user && (
-                  <li>
-                    <button
-                      className="text-red-400 w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-red-600 hover:text-white rounded"
-                      onClick={handleLogout}
-                    >
-                      logout
-                    </button>
-                  </li>
-                )}
-              </ul>
-            )}
-          </div>
-
-          {user && (
-            <div className="text-secondary text-sm">Hi, {user.name}!</div>
-          )}
-        </div>
+        <MenuDropdown
+          user={user}
+          onNavigate={navigateTo}
+          onMenuClick={handleMenuClick}
+          onLogout={handleLogout}
+          currentPage={currentPage}
+        />
 
         {/* Rest of your existing mobile layout JSX stays the same */}
         {/* I'll include the key sections but keep the same structure */}
@@ -555,87 +407,14 @@ function App() {
           {/* Right side - Content */}
           <div className="w-1/2 h-3/4 flex flex-col">
             {/* Sticky menu bar */}
-            <div
-              className={`sticky top-0 z-50 w-full flex bg-primary py-2 px-4 flex-shrink-0 ${
-                user ? "justify-between" : "justify-center"
-              } items-center`}
-            >
-              <div className="relative dropdown-container">
-                <button
-                  className="btn m-1 justify-self-center bg-primary cursor-pointer"
-                  onClick={handleToggleDropdown}
-                >
-                  <Menu color="#DFFE59" />
-                </button>
-
-                {isDropdownOpen && (
-                  <ul
-                    className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
-                      user
-                        ? "left-0" // Left-aligned when user is authenticated
-                        : "left-1/2 transform -translate-x-1/2" // Centered when no user
-                    }`}
-                  >
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("events")}
-                      >
-                        events
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("private-events")}
-                      >
-                        request a private event
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("about")}
-                      >
-                        about us
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("faqs")}
-                      >
-                        FAQs
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={handleUploadClick}
-                      >
-                        upload your photos & videos
-                      </button>
-                    </li>
-                    {user && (
-                      <li>
-                        <button
-                          className="text-red-400 w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-red-600 hover:text-white rounded"
-                          onClick={handleLogout}
-                        >
-                          logout
-                        </button>
-                      </li>
-                    )}
-                  </ul>
-                )}
-              </div>
-
-              {user && (
-                <div className="text-secondary text-sm">
-                  Welcome, {user.name}!
-                </div>
-              )}
-            </div>
+            <MenuDropdown
+              user={user}
+              onNavigate={navigateTo}
+              onMenuClick={handleMenuClick}
+              onLogout={handleLogout}
+              isDesktop={true}
+              currentPage={currentPage}
+            />
 
             {/* Scrollable content */}
             <div
