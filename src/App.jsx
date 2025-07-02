@@ -158,9 +158,17 @@ function App() {
                     className="fill-[#DFFE59] or stroke-[#DFFE59]"
                   />
                 </button>
-
+                // Replace the dropdown ul elements in your code with this
+                updated version // This applies to all three instances in your
+                code (mobile, upload page, desktop)
                 {isDropdownOpen && (
-                  <ul className="absolute top-full left-1/2 transform -translate-x-1/2 border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1">
+                  <ul
+                    className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
+                      user
+                        ? "left-0" // Left-aligned when user is authenticated
+                        : "left-1/2 transform -translate-x-1/2" // Centered when no user
+                    }`}
+                  >
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
@@ -196,7 +204,7 @@ function App() {
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => navigateTo("upload")}
+                        onClick={handleUploadClick}
                       >
                         upload your photos & videos
                       </button>
@@ -256,9 +264,17 @@ function App() {
             >
               <Menu color="#DFFE59" />
             </button>
-
+            // Replace the dropdown ul elements in your code with this updated
+            version // This applies to all three instances in your code (mobile,
+            upload page, desktop)
             {isDropdownOpen && (
-              <ul className="absolute top-full left-1/2 transform -translate-x-1/2 border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1">
+              <ul
+                className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
+                  user
+                    ? "left-0" // Left-aligned when user is authenticated
+                    : "left-1/2 transform -translate-x-1/2" // Centered when no user
+                }`}
+              >
                 <li>
                   <button
                     className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
@@ -557,13 +573,21 @@ function App() {
                 >
                   <Menu color="#DFFE59" />
                 </button>
-
+                // Replace the dropdown ul elements in your code with this
+                updated version // This applies to all three instances in your
+                code (mobile, upload page, desktop)
                 {isDropdownOpen && (
-                  <ul className="absolute top-full left-1/2 transform -translate-x-1/2 border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1">
+                  <ul
+                    className={`absolute top-full border-accent border-2 flex flex-col text-secondary text-lg text-center max-w-xl bg-primary rounded-box z-[60] w-52 p-2 mt-1 ${
+                      user
+                        ? "left-0" // Left-aligned when user is authenticated
+                        : "left-1/2 transform -translate-x-1/2" // Centered when no user
+                    }`}
+                  >
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("desktop-events")}
+                        onClick={() => handleMenuClick("events")}
                       >
                         events
                       </button>
@@ -571,9 +595,7 @@ function App() {
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() =>
-                          handleMenuClick("desktop-private-events")
-                        }
+                        onClick={() => handleMenuClick("private-events")}
                       >
                         request a private event
                       </button>
@@ -581,7 +603,7 @@ function App() {
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("desktop-about")}
+                        onClick={() => handleMenuClick("about")}
                       >
                         about us
                       </button>
@@ -589,7 +611,7 @@ function App() {
                     <li>
                       <button
                         className="text-secondary w-full p-2 text-center cursor-pointer bg-transparent border-none hover:bg-accent rounded"
-                        onClick={() => handleMenuClick("desktop-faqs")}
+                        onClick={() => handleMenuClick("faqs")}
                       >
                         FAQs
                       </button>
