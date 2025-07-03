@@ -25,29 +25,22 @@ function BookingForm() {
     setIsSubmitting(true);
 
     try {
-      // Create email content
-      const emailSubject = "New Private Event Booking Request";
-      const emailBody = `
-New booking request from ${formData.fullName}
+      const templateParams = {
+        from_name: formData.fullName,
+        from_email: formData.email,
+        event_date: formData.eventDate,
+        duration: formData.duration,
+        number_of_people: formData.numberOfPeople,
+        additional_notes:
+          formData.additionalNotes || "No additional notes provided.",
+      };
 
-Contact Information:
-- Name: ${formData.fullName}
-- Email: ${formData.email}
-
-Event Details:
-- Date: ${formData.eventDate}
-- Duration: ${formData.duration}
-- Number of People: ${formData.numberOfPeople}
-
-Additional Notes:
-${formData.additionalNotes || "No additional notes provided."}
-      `;
-
-      // Open user's email client with pre-filled information
-      const mailtoLink = `mailto:karaokewithmegan@gmail.com?subject=${encodeURIComponent(
-        emailSubject
-      )}&body=${encodeURIComponent(emailBody)}`;
-      window.open(mailtoLink);
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
 
       setSubmitStatus("success");
       setFormData({
@@ -59,6 +52,7 @@ ${formData.additionalNotes || "No additional notes provided."}
         additionalNotes: "",
       });
     } catch (error) {
+      console.error("Email error:", error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
