@@ -344,11 +344,7 @@ function Upload() {
               • consent is gorgeous in all things! make sure you have permission
               from everyone visible in your uploads!
             </li>
-            <li>
-              • don't be gross - you're literally talking to megan right now, i
-              built this thing, and if you send me dick pics so help me god i
-              will find you and press charges 😙
-            </li>
+            <li>• don't be gross</li>
             <li>
               • by uploading, you give us permission to share on our social
               media @karaokewithmegan and if you don't follow us then you should
