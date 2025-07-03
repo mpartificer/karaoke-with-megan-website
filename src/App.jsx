@@ -213,7 +213,7 @@ function App() {
                   <p className="text-sm text-primary">Time: 11:00 PM - close</p>
                   <p className="text-sm text-primary">Location: Erin's Pub</p>
                 </div>
-                <div className="bg-accent rounded-lg shadow-lg p-6">
+                {/* <div className="bg-accent rounded-lg shadow-lg p-6">
                   <h3 className="text-xl font-semibold text-primary mb-3">
                     Erin's Anniversary Screech In
                   </h3>
@@ -242,6 +242,7 @@ function App() {
                   </p>
                   <p className="text-sm text-primary">Location: Erin's Pub</p>
                 </div>
+                */}
               </div>
             </div>
           </section>
@@ -449,7 +450,7 @@ function App() {
                         Location: Erin's Pub
                       </p>
                     </div>
-                    <div className="bg-accent rounded-lg shadow-lg p-6">
+                    {/* <div className="bg-accent rounded-lg shadow-lg p-6">
                       <h3 className="text-xl font-semibold text-primary mb-3">
                         Erin's Anniversary Screech In
                       </h3>
@@ -486,6 +487,7 @@ function App() {
                         Location: Erin's Pub
                       </p>
                     </div>
+                    */}
                   </div>
                 </div>
               </section>
