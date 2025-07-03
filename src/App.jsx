@@ -56,6 +56,12 @@ function App() {
     window.location.hash = page;
     setCurrentPage(page);
     setIsDropdownOpen(false);
+
+    // Scroll to top when navigating to a new page
+    // Use setTimeout to ensure the page change has processed
+    setTimeout(() => {
+      window.scrollTo(0, 0); // Instant scroll to top
+    }, 0);
   };
 
   const handleToggleDropdown = () => {
