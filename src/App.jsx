@@ -394,10 +394,7 @@ function App() {
               className="flex-1 overflow-y-auto overflow-x-hidden"
             >
               {/* Desktop Events Section */}
-              <section
-                id="desktop-events"
-                className="w-full px-6 pb-16 pt-8 min-h-screen"
-              >
+              <section id="desktop-events" className="w-full px-6 pb-16 pt-8">
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-secondary mb-8">
                     events
