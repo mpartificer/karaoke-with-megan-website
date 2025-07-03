@@ -324,6 +324,19 @@ function App() {
                 <div className="space-y-6">
                   <div className="bg-white rounded-lg shadow-lg p-6">
                     <h3 className="text-xl font-semibold text-primary mb-3">
+                      How long will my song take?
+                    </h3>
+                    <p className="text-gray-700">
+                      That really depends on how many people are there and how
+                      many songs you want to sing! I try to make sure everyone
+                      gets a turn per round, and often I will do a host tax
+                      (aka, sing a song!) as a marker that we're at the top of
+                      the round. I have found this is the fairest way to ensure
+                      that everyone gets a chance to perform
+                    </p>
+                  </div>
+                  <div className="bg-white rounded-lg shadow-lg p-6">
+                    <h3 className="text-xl font-semibold text-primary mb-3">
                       How much to bump my songs up?{" "}
                     </h3>
                     <p className="text-gray-700">
