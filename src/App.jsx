@@ -362,10 +362,10 @@ function App() {
       </div>
 
       {/* Desktop Layout */}
-      <div className="flex w-screen h-screen overflow-hidden pt-12 justify-center align-center">
-        <div className="hidden lg:flex h-screen w-3/4">
+      <div className="flex w-screen h-screen justify-center align-stretch">
+        <div className="hidden lg:flex items-stretch mt-20 mb-20 w-3/4">
           {/* Left side - Image */}
-          <div className="w-1/2 h-3/4">
+          <div className="w-sm self-center justify-self-center">
             <a
               target="_blank"
               href="https://www.instagram.com/betterpleasure?igsh=MTB6dGFtMHJxbncyMw=="
@@ -379,7 +379,7 @@ function App() {
           </div>
 
           {/* Right side - Content */}
-          <div className="w-1/2 h-3/4 flex flex-col">
+          <div className="w-sm items-baseline flex flex-col">
             {/* Sticky menu bar */}
             <MenuDropdown
               user={user}
