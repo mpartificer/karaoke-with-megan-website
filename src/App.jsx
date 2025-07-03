@@ -213,36 +213,6 @@ function App() {
                   <p className="text-sm text-primary">Time: 11:00 PM - close</p>
                   <p className="text-sm text-primary">Location: Erin's Pub</p>
                 </div>
-                {/* <div className="bg-accent rounded-lg shadow-lg p-6">
-                  <h3 className="text-xl font-semibold text-primary mb-3">
-                    Erin's Anniversary Screech In
-                  </h3>
-                  <p className="text-primary mb-4">
-                    In collaboration with Fogged Up Comedy, we will be hosting a
-                    traditional Newfoundland Screech In to celebrate 3 years of
-                    Erin's new ownership! Contact our instagram
-                    @karaokewithmegan to claim your spot!
-                  </p>
-                  <p className="text-sm text-primary">Date: July 24, 2025</p>
-                  <p className="text-sm text-primary">Time: 11:00 PM</p>
-                  <p className="text-sm text-primary">Location: Erin's Pub</p>
-                </div>
-                <div className="bg-accent rounded-lg shadow-lg p-6">
-                  <h3 className="text-xl font-semibold text-primary mb-3">
-                    Christmas in July{" "}
-                  </h3>
-                  <p className="text-primary mb-4">
-                    Join us for extended anniversary celebrations with karaoke
-                    from 9PM to 1AM and then dance the night away with a
-                    Christmas dance party.{" "}
-                  </p>
-                  <p className="text-sm text-primary">Date: July 27, 2025</p>
-                  <p className="text-sm text-primary">
-                    Time: 9:00 PM - 3:00 AM
-                  </p>
-                  <p className="text-sm text-primary">Location: Erin's Pub</p>
-                </div>
-                */}
               </div>
             </div>
           </section>
@@ -450,44 +420,6 @@ function App() {
                         Location: Erin's Pub
                       </p>
                     </div>
-                    {/* <div className="bg-accent rounded-lg shadow-lg p-6">
-                      <h3 className="text-xl font-semibold text-primary mb-3">
-                        Erin's Anniversary Screech In
-                      </h3>
-                      <p className="text-primary mb-4">
-                        In collaboration with Fogged Up Comedy, we will be
-                        hosting a traditional Newfoundland Screech In to
-                        celebrate 3 years of Erin's new ownership! Contact our
-                        instagram @karaokewithmegan to claim your spot!
-                      </p>
-                      <p className="text-sm text-primary">
-                        Date: July 24, 2025
-                      </p>
-                      <p className="text-sm text-primary">Time: 11:00 PM</p>
-                      <p className="text-sm text-primary">
-                        Location: Erin's Pub
-                      </p>
-                    </div>
-                    <div className="bg-accent rounded-lg shadow-lg p-6">
-                      <h3 className="text-xl font-semibold text-primary mb-3">
-                        Christmas in July{" "}
-                      </h3>
-                      <p className="text-primary mb-4">
-                        Join us for extended anniversary celebrations with
-                        karaoke from 9PM to 1AM and then dance the night away
-                        with a Christmas dance party.{" "}
-                      </p>
-                      <p className="text-sm text-primary">
-                        Date: July 27, 2025
-                      </p>
-                      <p className="text-sm text-primary">
-                        Time: 9:00 PM - 3:00 AM
-                      </p>
-                      <p className="text-sm text-primary">
-                        Location: Erin's Pub
-                      </p>
-                    </div>
-                    */}
                   </div>
                 </div>
               </section>
