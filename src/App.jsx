@@ -211,7 +211,9 @@ function App() {
                   </p>
                   <p className="text-sm text-primary">Date: Every Thursday</p>
                   <p className="text-sm text-primary">Time: 11:00 PM - close</p>
-                  <p className="text-sm text-primary">Location: Erin's Pub</p>
+                  <p className="text-sm text-primary">
+                    Location: Erin's Pub, St. John's, NL
+                  </p>
                 </div>
               </div>
             </div>
@@ -249,10 +251,10 @@ function App() {
               <div className="max-w-3xl mx-auto bg-secondary rounded-lg p-6">
                 <p className="text-lg text-gray-700 font-semibold mb-6">
                   Hi, I'm Megan! You can often find me in the host's chair at
-                  Erin's Pub on Thursdays. My goal has been and will always be
-                  to create a safe, fun, and inclusive event in the downtown
-                  space. Everyone should get to feel like a star, and no one
-                  feels alone on stage.
+                  Erin's Pub in St. John's, NL on Thursdays. My goal has been
+                  and will always be to create a safe, fun, and inclusive event
+                  in the downtown space. Everyone should get to feel like a
+                  star, and no one feels alone on stage.
                 </p>
                 <a
                   href="https://www.instagram.com/karaokewithmegan?igsh=MTB1d3c0bjg1OHhxeg%3D%3D&utm_source=qr"
@@ -414,7 +416,7 @@ function App() {
                         Time: 11:00 PM - close
                       </p>
                       <p className="text-sm text-primary">
-                        Location: Erin's Pub
+                        Location: Erin's Pub, St. John's, NL
                       </p>
                     </div>
                   </div>
